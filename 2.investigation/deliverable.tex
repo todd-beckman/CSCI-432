@@ -1,17 +1,11 @@
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
-
-%opening
 \title{Project Deliverable 2}
 \author{TODO: Group Number Here}
-
 \begin{document}
-
 \maketitle
 
-\section{Introduction}
-
-\section{Algorithm 1}
+\section*{Algorithm 1: K-Median}
 
 $k$-Median is a cluster-analysis strategy to solve a cluster distance minimization problem. The problem is nearly identical to the $k$-Means problem. The difference is that in $k$-Means, the average points may be calculated, while in $k$-Median, the solution set must be a subset of the input. The goal is to minimize the distance from all points to their nearest median point.
 
@@ -22,12 +16,28 @@ Equation 1: Median Distance Formula
 
 A proposed solution to this problem uses local search. Propose a solution $H \in F$ to begin with and calculate its score. Then, incrementally swap out points one at a time with the median points and score the result, tracking the best score and attempting to minimize that. The solution is not guaranteed to be optimal due to limitations in the local search technique. According to Pandit [4], the solution computed has an approximation ratio of 5, meaning that it is within five times the optimal solution.
 
-\section{Algorithm 2}
+\section*{Algorithm 2: Dancing Links}
 
+Donald Knuth developed Dancing Links as an approach to implementing Algorithm X, which is a proposed solution to the Exact Cover problem [1]. The Exact Cover problem is described as follows:
 
+$$Z_iZ, Z_i \subset Y$$
 
-\section{Algorithm 3}
+$$Y_jY, Y_j \notin Z_i$$
 
-\section{Discussion}
+$Z^{\ast}$ is a solution to the exact cover problem if it satisfies the following constraints.
+
+$$Z^{\ast} \subset Z$$
+
+$$Z_{i}^{\ast} \cap Z_{j} = \emptyset $$
+
+$$Z_{1}^{\ast} \cup Z_{2}^{\ast} \cup ... \cup Z_{n}^{\ast} = Y$$
+
+A common way to represent the exact coverage problem is to let $Z$ be an $n$x$m$ matrix. The rows of  this matrix represent $Z_i$ while the columns represent $Y_i$. If the set $Z_i$ contains the element $Y_j$ then $Z_{ij}=1$. Otherwise, $Z_{ij}=0$. The problem is to find some set of rows that have exactly one $1$ in each column, if such a solution exists.
+
+Though other uses exist, Dancing Link's most apparent and direct use is to solve the Exact Cover problem. The matrix $Z$ is represented by a two-dimensional Linked List. Entries with value $0$ are not placed in the Linked List. In addition, each column has a header node that is used to traverse the matrix. The header nodes are connected to each other horizontally. Each node is connected horizontally to the closest $1$ in each of four directions (up, down, left, and right. The lists are circular, so the node to the right of the farthest right node of a row is the farthest left node of that row.
+
+The algorithm is a recursive depth-first search with backtracking. With each recursion, a set of nodes is removed from the structure, terminating with the base case of an empty structure. The challenge lies in determining which nodes to remove. Knuth's solution is to choose an arbitrary column $i$, and choose a row $j$ where $Z_{ij}=1$. If such a row does not exist, there is no solution. Before returning, each row that has a $1$ in column $i$ is removed and each column that has a $1$ in row $j$ is removd. Row $j$ is included in the partial solution which will be returned by the recursive function.
+
+\section*{Algorithm 3: D* Lite}
 
 \end{document}
