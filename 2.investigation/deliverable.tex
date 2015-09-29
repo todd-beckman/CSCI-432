@@ -2,16 +2,32 @@
 \usepackage[margin=1in]{geometry}
 
 %opening
-\title{TODO: Title Here}
+\title{Project Deliverable 2}
 \author{TODO: Group Number Here}
 
 \begin{document}
 
 \maketitle
-\include[intro]
-\include[1]
-\include[2]
-\include[3]
-\include[discussion]
+
+\section{Introduction}
+
+\section{Algorithm 1}
+
+$k$-Median is a cluster-analysis strategy to solve a cluster distance minimization problem. The problem is nearly identical to the $k$-Means problem. The difference is that in $k$-Means, the average points may be calculated, while in $k$-Median, the solution set must be a subset of the input. The goal is to minimize the distance from all points to their nearest median point.
+
+A K-Medians instance is a tuple $(k,F,C,d)$, where k is the number of median points, $F$ is the set of solution candidates, $C$ is the set of all points, and $d(j,S)$ is the distance from point $j$ to the nearest point in $S$. The solution $H \in F$ is one in which Equation 1 is minimized [3].
+
+$$\sum_{c \in C} d(c,H)$$
+Equation 1: Median Distance Formula
+
+A proposed solution to this problem uses local search. Propose a solution $H \in F$ to begin with and calculate its score. Then, incrementally swap out points one at a time with the median points and score the result, tracking the best score and attempting to minimize that. The solution is not guaranteed to be optimal due to limitations in the local search technique. According to Pandit [4], the solution computed has an approximation ratio of 5, meaning that it is within five times the optimal solution.
+
+\section{Algorithm 2}
+
+
+
+\section{Algorithm 3}
+
+\section{Discussion}
 
 \end{document}
