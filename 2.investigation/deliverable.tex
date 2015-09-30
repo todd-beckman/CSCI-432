@@ -1,7 +1,12 @@
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
 \title{Project Deliverable 2}
 \author{TODO: Group Number Here}
+
+\graphicspath{ {img/} }
+
 \begin{document}
 \maketitle
 
@@ -12,7 +17,10 @@ $k$-Median is a cluster-analysis strategy to solve a cluster distance minimizati
 A K-Medians instance is a tuple $(k,F,C,d)$, where k is the number of median points, $F$ is the set of solution candidates, $C$ is the set of all points, and $d(j,S)$ is the distance from point $j$ to the nearest point in $S$. The solution $H \in F$ is one in which Equation 1 is minimized [3].
 
 $$\sum_{c \in C} d(c,H)$$
-Equation 1: Median Distance Formula
+
+\begin{center}
+    Equation 1
+\end{center}
 
 A proposed solution to this problem uses local search. Propose a solution $H \in F$ to begin with and calculate its score. Then, incrementally swap out points one at a time with the median points and score the result, tracking the best score and attempting to minimize that. The solution is not guaranteed to be optimal due to limitations in the local search technique. According to Pandit [4], the solution computed has an approximation ratio of 5, meaning that it is within five times the optimal solution.
 
@@ -21,18 +29,15 @@ A proposed solution to this problem uses local search. Propose a solution $H \in
 Donald Knuth developed Dancing Links as an approach to implementing Algorithm X, which is a proposed solution to the Exact Cover problem [1]. The Exact Cover problem is described as follows:
 
 $$Z_iZ, Z_i \subset Y$$
-
 $$Y_jY, Y_j \notin Z_i$$
 
-$Z^{\ast}$ is a solution to the exact cover problem if it satisfies the following constraints.
+$Z^{\ast}$ is a solution to the exact cover problem if it satisfies the following constraints:
 
 $$Z^{\ast} \subset Z$$
-
 $$Z_{i}^{\ast} \cap Z_{j} = \emptyset $$
-
 $$Z_{1}^{\ast} \cup Z_{2}^{\ast} \cup ... \cup Z_{n}^{\ast} = Y$$
 
-A common way to represent the exact coverage problem is to let $Z$ be an $n$x$m$ matrix. The rows of  this matrix represent $Z_i$ while the columns represent $Y_i$. If the set $Z_i$ contains the element $Y_j$ then $Z_{ij}=1$. Otherwise, $Z_{ij}=0$. The problem is to find some set of rows that have exactly one $1$ in each column, if such a solution exists.
+A common way to represent the exact coverage problem is to let $Z$ be an $n$x$m$ matrix. The rows of this matrix represent $Z_i$ while the columns represent $Y_i$. If the set $Z_i$ contains the element $Y_j$ then $Z_{ij}=1$. Otherwise, $Z_{ij}=0$. The problem is to find some set of rows that have exactly one $1$ in each column, if such a solution exists.
 
 Though other uses exist, Dancing Link's most apparent and direct use is to solve the Exact Cover problem. The matrix $Z$ is represented by a two-dimensional Linked List. Entries with value $0$ are not placed in the Linked List. In addition, each column has a header node that is used to traverse the matrix. The header nodes are connected to each other horizontally. Each node is connected horizontally to the closest $1$ in each of four directions (up, down, left, and right. The lists are circular, so the node to the right of the farthest right node of a row is the farthest left node of that row.
 
@@ -40,9 +45,17 @@ The algorithm is a recursive depth-first search with backtracking. With each rec
 
 \section*{Algorithm 3: D* Lite}
 
+D* lite is a modern path planning algorithm proposed by Sven Koenig and Maxim Likhachev. Inspired by D*, D* Lite is actually a variation of Lifelong Planning A* (LPA*) with traits of D*, also made in part by Koenig. The motivation for D* Lite was to speed up path planning in unknown or dynamic maps. Classic path planning algorithms require recalculating the entirety of the path, or storing a great deal of information. Figure 1, taken from Koenig [4], demonstrates the replanning after a new obstacle is observed. Only the greyed cells have had their edge weights modified, as opposed to the entire map.
+
+\begin{center}
+    \includegraphics[scale=0.15]{dstarlite}
+\end{center}
+
+D* Lite functions by, upon encountering a previously unknown obstacle, propagating the changes in edge weights backwards and forwards as necessary. The main challenges come not from propagating these weights, but from doing so while maintaining as much of the previous, important, state as possible. This includes things like vertices in the priority queue whose edge weights have been altered. 
+
 \section*{Works Cited}
 
-[1] D. E. Knuth, ``Dancing Links'', Stanford University, November 15,  2000.\\\relax
+[1] D. E. Knuth, ``Dancing Links'', Stanford University, November 15, 2000.\\\relax
 [2] S. Koenig, M. Likhachev, ``D* Lite'', 2002.\\\relax
 [3] S. Li, O. Svensson, ``Approximating k-Median via Pseudo-Approximation'', November 2, 2012.\\\relax
 [4] V. Pandit, ``Local Search Based Approximation Algorithms: The k-median problem'', Bangalore, India, 2011.\\\relax
