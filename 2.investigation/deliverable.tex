@@ -50,6 +50,8 @@ D* lite is a modern path planning algorithm proposed by Sven Koenig and Maxim Li
 
 \begin{center}
     \includegraphics[scale=0.15]{dstarlite}
+    
+    Figure 1
 \end{center}
 
 D* Lite functions by, upon encountering a previously unknown obstacle, propagating the changes in edge weights backwards and forwards as necessary. The main challenges come not from propagating these weights, but from doing so while maintaining as much of the previous, important, state as possible. This includes things like vertices in the priority queue whose edge weights have been altered. 
