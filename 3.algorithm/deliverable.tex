@@ -1,0 +1,74 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{float}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage[backend=biber,style=authoryear]{biblatex}
+\addbibresource{main.bib}
+
+\bibliography{main}
+
+%opening
+\title{D* Lite}
+\author{Group 4\\
+\small{Todd Beckman, Dylan Hills, Alex Huleatt, JJ Locke, Kalvyn Lu, Luke Welna}}
+\date{}
+\begin{document}
+
+\maketitle
+\section{Introduction}
+
+While many efficient algorithms exist in the paradigm of path planning, few address two difficult and practical problems within this realm. The first is of a dynamic environment for which calculated pathing information may become irrelevant. The second is of an uncertain environment where data is either not entirely trustworthy or even fully observable. 
+
+\section{Motivation}
+
+D* lite is a modern path planning algorithm implemented by Sven Koenig and Maxim Likhachev as a solution to both of these problems. Inspired by D*, D* Lite is actually a variation of Lifelong Planning A* (LPA*) with traits of D*, also made in part by Koenig. While classic path planning algorithms require recalculating the entirety of the path, or storing a great deal of information, D* Lite manages to recalculate optimal paths when new information is discovered without needing to update most of the calculations that would otherwise be completely unaffected. The pseudocode for these algorithms is appended.
+
+\section{Analysis}
+
+A runtime analysis of D* Lite is rather complicated due to the varying environments it could be run on and the dynamicity of those environments. The runtime is clearly dependant on the number of verticies and edges in the graph. It should be noted that D* Lite is a run in real time, which  means that the runtime also depends on how often the agent encounters a previously unobserved obsticle. The runtime is therefore dependant on 3 variables, the number of edges, the number of verticies, and how often the agent encounters changes in the environment.
+
+\section{Discussion}
+
+The applications of D* Lite are endless. From videogames to realtime planning with robots, D* Lite is a stark improvement to previous algorithms designed for fast replanning. Both elegant and effective, it would be somewhat surprising if D* Lite is not a commonly used algorithm in the years to come.
+
+One of the main challenges of D* Lite is to balance the weight of new information with old but still important data. Otherwise, D* Lite is most useful in problems with dynamic or uncertain environments. These desirable traits make it the algoritihm of choice in many situations, but for static environments with full information, D* Lite is impractical.
+
+\section*{Appendix: Algorithm Pseudocode}
+
+This pseudocode has been translated from D* Lite ~\autocite{koenig}. 
+
+\begin{algorithm}[H]\caption{\textsc{D* Lite }}
+ \begin{algorithmic}[1]
+  \State $s_{last} \leftarrow s_{start}$
+  \State $U \leftarrow \emptyset$
+  \State $k_m \leftarrow 0$
+  \For{$s \in S$}
+   \State $rhs[s] \leftarrow g[s] \leftarrow infinity$
+  \EndFor
+  \State $rhs[s_{goal}] \leftarrow 0$
+  \State U.Insert($s_{goal}$,CalculateKey($s_{goal}$)) // see ~\autocite{koenig}
+  \State ComputeShortestPath() //  see ~\autocite{koenig}
+  \While{$s_{start}$ not $s_{goal}$}
+   \State $s_{start}=argmin_{s'\in Succ(s_{start})}(c(s_{start},s')+g(s'))$
+   \State Move to $s_{start}$
+   \State Scan graph for changed edge costs
+   \If{any edge costs changed}
+    \State $k_m \leftarrow k_m+h(s_{last},s_{start})$
+    \State $s_{last}=s_{start}$
+    \For{all directed edges $(u,v)$ with changed edge costs}
+     \State Update edge cost $c(u,v)$
+     \State UpdateVertex(u) //  see ~\autocite{koenig}
+    \EndFor
+    \State ComputeShortestPath() // see ~\autocite{koenig}
+   \EndIf
+  \EndWhile
+ \end{algorithmic}
+\end{algorithm}
+
+[1] S. Koenig, M. Likhachev, “D* Lite”, 2002.
+
+\end{document}
+
+
