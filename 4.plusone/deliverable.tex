@@ -1,0 +1,64 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{float}
+
+\title{Plus One Declaration}
+\author{Group 4\\
+\small{Todd Beckman, Dylan Hills, Alex Huleatt, JJ Locke, Kalvyn Lu, Luke Welna}}
+\date{}
+\begin{document}
+
+\maketitle
+\section{Plus One Element}
+
+Group 4 will be comparing the performance of D* Lite to other algorithms. This will involve implementation
+of a testing environment, which will save information based on timing and resource statistics in a normalized
+format such as comma separated values. The following algorithms will be implemented for this project:
+
+\begin{itemize}
+    \item D* Lite
+    \item A* (the greedy method)
+    \item Dijkstra's Algorithm (the brute force method)
+\end{itemize}
+
+\subsection{Performance Metrics}
+
+The performance of the algorithms is not solely dependent on the exact runtime. There are other important
+metrics to consider in order to truly determine the efficiency of various algorithms. The following is a list of metrics to be considered for this experiment:
+
+\begin{itemize}
+    \item Actual runtime.
+    \item The number cell observations
+    \item The number of comparisons
+    \item Number of movements (the length of the final path)
+\end{itemize}
+
+\subsection{Environment Variables}
+
+It would not be helpful to test the algorithms in the same environment repeatedly. Varying the environment variables may help to reveal important trends involving their performance. The following variables should be tested against each other:
+
+\begin{itemize}
+    \item Behavior in a static environment (control)
+    \item Behavior in an uncertain environment with limited sight
+    \item Behavior in an uncertain environment which changes at runtime
+    \item Behavior of the above on various machines
+\end{itemize}
+
+\section{Timeline}
+
+\begin{centering}
+\begin{table}[H]
+\begin{tabular}{ | l | l |}
+\hline
+Phase & Plan \\ \hline
+November 2-9 & Implement Test Environment \\ \hline
+November 9-16 & Implement D* Lite and supporting algorithms \\ \hline
+November 16-21 & Run tests and gather data \\ \hline
+November 21-28 & Prepare Presentation \\ \hline
+\end{tabular}
+\end{table}
+\end{centering}
+
+\end{document}
+
+
