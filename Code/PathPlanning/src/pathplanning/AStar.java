@@ -6,35 +6,38 @@ package pathplanning;
  * and open the template in the editor.
  */
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
  *
  * @author Alex
  */
-public class SimplePather {
+public class AStar {
 
-    private int[][] prev;
-    private double[][] cost;
+    private HashMap<Point,Integer> prev;
+    private HashMap<Point,Double> cost;
     private final double[] costs;
-    private final Point[] q;
+    private final PointDoubleHeap q;
     private int index;
     private Point dest;
     public static final int MAX_PATH_LENGTH = 800;
 
     int minX = 0;
-    int maxX = 240;
+    int maxX;
     int minY = 0;
-    int maxY = 240;
+    int maxY;
     
-    private HashSet<Point> obs;
+    private final HashSet<Point> obs;
 
 
-    public SimplePather(HashSet<Point> obs) {
-        prev = new int[maxX][maxY];
-        q = new Point[8000];
+    public AStar(int maxX, int maxY, HashSet<Point> obs) {
+        this.maxX=maxX;
+        this.maxY=maxY;
+        prev = new HashMap<>();
         costs = new double[8000];
-        cost = new double[maxX][maxY];
+        q = new PointDoubleHeap(8000);
+        cost = new HashMap<>();
         this.obs = obs;
     }
 
@@ -49,8 +52,8 @@ public class SimplePather {
      * intersect any obstacles.
      */
     public Point[] pathfind(Point start, Point finish) {
-        prev = new int[maxX][maxY];
-        cost = new double[maxX][maxY];
+        prev = new HashMap<>();
+        cost = new HashMap<>();
         index = 0;
         Point current;
         dest = start;
@@ -60,7 +63,7 @@ public class SimplePather {
             check(finish, i);
         }
         while (index != 0) {
-            current = q[--index];
+            current = q.pop();
             if (current.x == desx && current.y == desy) {
                 return reconstruct();
             }
@@ -80,13 +83,13 @@ public class SimplePather {
         int count = 0;
         int dir = 0;
         do {
-            int next = ((prev[current.x][current.y] + 3) & 7) + 1;
+            int next = ((prev.get(current) + 3) & 7) + 1;
             if (dir == 0 || next != dir) { //this minimizes the path, for efficient radio-ing
                 path_temp[count++] = current;
                 dir = next;
             }
             current = moveTo(current, next);
-        } while (prev[current.x][current.y] != 0);
+        } while (prev.get(current) != 0);
         path_temp[count++] = current;
         final Point[] path = new Point[count];
         System.arraycopy(path_temp, 0, path, 0, count);
@@ -94,7 +97,7 @@ public class SimplePather {
     }
 
     private void expand(Point p) {
-        final int dir = prev[p.x][p.y];
+        final int dir = prev.get(p);
         if (dir == 0) {
             return;
         }
@@ -117,14 +120,13 @@ public class SimplePather {
         }
         final int nx = n.x;
         final int ny = n.y;
-        double potentialCost = cost[parent.x][parent.y] + parent.dist(n);
-        if (prev[nx][ny] == 0 || cost[nx][ny] > potentialCost) {
-            add(n, n.dist(dest) + potentialCost);
-            prev[nx][ny] = dir;
-            cost[nx][ny] = potentialCost;
+        double potentialCost = cost.get(parent) + parent.dist(n);
+        if (prev.get(n) == 0 || cost.get(n) > potentialCost) {
+            q.add(n, n.dist(dest) + potentialCost);
+            prev.put(n,dir);
+            cost.put(n,potentialCost);
         }
     }
-
 
     /**
      * Moves a Point one cell along direction d.
@@ -152,17 +154,6 @@ public class SimplePather {
             default:
                 return new Point(p.x - 1, p.y - 1);
         }
-    }
-
-    private void add(Point p, double c) {
-        int i = index;
-        for (; i != 0 && c > costs[i - 1]; --i) {
-            costs[i] = costs[i - 1];
-            q[i] = q[i - 1];
-        }
-        costs[i] = c;
-        q[i] = p;
-        index++;
     }
 
 
