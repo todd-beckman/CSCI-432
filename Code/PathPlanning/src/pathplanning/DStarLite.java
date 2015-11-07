@@ -5,6 +5,7 @@ package pathplanning;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import pathplanning.util.Point;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -157,4 +158,7 @@ public class DStarLite {
      * @param p 
      */
     public void addObs(Point p) {obs.add(p);}
+
+
+
 }

@@ -5,6 +5,7 @@ package pathplanning;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import pathplanning.util.Point;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -25,7 +26,7 @@ public class AStar {
     private int index;
     private Point dest;
     public static final int MAX_PATH_LENGTH = 400;
-    private static final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
+    private final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
     public int minX,minY,maxX,maxY;
     
     public AStar(int minX, int maxX, int minY, int maxY, HashSet<Point> obs) {
