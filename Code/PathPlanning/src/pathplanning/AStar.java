@@ -47,6 +47,7 @@ public class AStar implements Pather {
      * @return An array of Points representing a path that does not
      * intersect any obstacles.
      */
+    @Override
     public Point[] pathfind(Point start, Point finish) {
         prev = new HashMap<>();
         cost = new HashMap<>();
