@@ -13,7 +13,7 @@ import java.util.HashSet;
  *
  * @author Alex
  */
-public class DStarLite {
+public class DStarLite implements Pather {
 
     //Using hashes instad of arrays for overall memory savings on sparse grids.
     //Minor memory losses on dense grids. <25%.
@@ -29,7 +29,7 @@ public class DStarLite {
     private final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
     public int minX,minY,maxX,maxY;
     
-    private final Logger callback;
+    public final Logger callback;
     
     public DStarLite(int minX, int maxX, int minY, int maxY, HashSet<Point> obs, Logger callback) {
         this.minX=minX;
@@ -47,6 +47,7 @@ public class DStarLite {
      * @return An array of Points representing a path that does not
      * intersect any obstacles.
      */
+    @Override
     public Point[] pathfind(Point start, Point finish) {
         prev = new HashMap<>();
         cost = new HashMap<>();
@@ -60,6 +61,7 @@ public class DStarLite {
         }
         while (index != 0) {
             current = q.pop();
+            if (callback != null) callback.report("pop",current.x,current.y);
             if (current.x == desx && current.y == desy) {
                 return reconstruct();
             }
@@ -74,6 +76,7 @@ public class DStarLite {
      * @return
      */
     private Point[] reconstruct() {
+        if (callback != null) callback.report("reconstruct");
         Point current = dest;
         int count = 0;
         int dir = 0;
@@ -94,6 +97,7 @@ public class DStarLite {
     //Optimization inspired by JPS.
     //Branching factor of ~3, instead of ~7.
     private void expand(Point p) {
+        if (callback != null) callback.report("expand", p.x,p.y);
         final int dir = prev.get(p);
         if (dir == 0 || !(p.x<maxX && p.y<maxY && p.x>=minX && p.y>=minY)) {
             return;
