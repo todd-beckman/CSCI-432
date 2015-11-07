@@ -29,12 +29,15 @@ public class AStar {
     private final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
     public int minX,minY,maxX,maxY;
     
-    public AStar(int minX, int maxX, int minY, int maxY, HashSet<Point> obs) {
+    private final Logger callback;
+    
+    public AStar(int minX, int maxX, int minY, int maxY, HashSet<Point> obs, Logger callback) {
         this.minX=minX;
         this.minY=minY;
         this.maxX=maxX;
         this.maxY=maxY;
         this.obs = obs;
+        this.callback = callback;
     }
     
     /**
@@ -57,6 +60,7 @@ public class AStar {
         }
         while (index != 0) {
             current = q.pop();
+            if (callback != null) callback.report("pop",current.x,current.y);
             if (current.x == desx && current.y == desy) {
                 return reconstruct();
             }
@@ -71,6 +75,7 @@ public class AStar {
      * @return
      */
     private Point[] reconstruct() {
+        if (callback != null) callback.report("reconstruct");
         Point current = dest;
         int count = 0;
         int dir = 0;
@@ -91,6 +96,7 @@ public class AStar {
     //Optimization inspired by JPS.
     //Branching factor of ~3, instead of ~7.
     private void expand(Point p) {
+        if (callback != null) callback.report("expand", p.x,p.y);
         final int dir = prev.get(p);
         if (dir == 0 || !(p.x<maxX && p.y<maxY && p.x>=minX && p.y>=minY)) {
             return;
@@ -113,13 +119,16 @@ public class AStar {
      * @param dir 
      */
     private void check(Point parent, int dir) {
+        if (callback != null) callback.report("eval", parent.x,parent.y,dir);
         final Point n = moveTo(parent, dir);
         if (obs.contains(n)) {
             return;
         }
         int potentialCost = cost.get(parent) + parent.dist(n);
         if (prev.get(n) == 0 || cost.get(n) > potentialCost) {
-            q.add(n, n.dist(dest) + potentialCost);
+            int dis = n.dist(dest);
+            if (callback != null) callback.report("set", n.x,n.y,parent.x,parent.y, potentialCost, dis);
+            q.add(n, dis + potentialCost);
             prev.put(n,dir);
             cost.put(n,potentialCost);
         }
@@ -158,4 +167,7 @@ public class AStar {
      * @param p 
      */
     public void addObs(Point p) {obs.add(p);}
+
+
+
 }

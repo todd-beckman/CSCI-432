@@ -26,15 +26,18 @@ public class DStarLite {
     private int index;
     private Point dest;
     public static final int MAX_PATH_LENGTH = 400;
-    private static final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
+    private final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
     public int minX,minY,maxX,maxY;
     
-    public DStarLite(int minX, int maxX, int minY, int maxY, HashSet<Point> obs) {
+    private final Logger callback;
+    
+    public DStarLite(int minX, int maxX, int minY, int maxY, HashSet<Point> obs, Logger callback) {
         this.minX=minX;
         this.minY=minY;
         this.maxX=maxX;
         this.maxY=maxY;
         this.obs = obs;
+        this.callback = callback;
     }
     
     /**
@@ -113,13 +116,16 @@ public class DStarLite {
      * @param dir 
      */
     private void check(Point parent, int dir) {
+        if (callback != null) callback.report("eval", parent.x,parent.y,dir);
         final Point n = moveTo(parent, dir);
         if (obs.contains(n)) {
             return;
         }
         int potentialCost = cost.get(parent) + parent.dist(n);
         if (prev.get(n) == 0 || cost.get(n) > potentialCost) {
-            q.add(n, n.dist(dest) + potentialCost);
+            int dis = n.dist(dest);
+            if (callback != null) callback.report("set", n.x,n.y,parent.x,parent.y, potentialCost, dis);
+            q.add(n, dis + potentialCost);
             prev.put(n,dir);
             cost.put(n,potentialCost);
         }
