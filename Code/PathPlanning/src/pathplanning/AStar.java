@@ -13,7 +13,7 @@ import java.util.HashSet;
  *
  * @author Alex
  */
-public class AStar {
+public class AStar implements Pather {
 
     //Using hashes instad of arrays for overall memory savings on sparse grids.
     //Minor memory losses on dense grids. <25%.
