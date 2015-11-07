@@ -11,4 +11,6 @@ package pathplanning;
  */
 public interface Logger {
     
+    public void report(String st, int... args);
+    
 }
