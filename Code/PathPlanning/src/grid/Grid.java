@@ -91,6 +91,14 @@ public abstract class Grid {
     }
     
     /**
+     * Removes the obstacle at the location
+     * @param location
+     */
+    public void removeObstacle(Point location) {
+        obstacles.remove(location);
+    }
+    
+    /**
      * Illustrates this grid in a string with one row per line
      * @return
      */
@@ -114,5 +122,13 @@ public abstract class Grid {
             output += "|" + new String(grid[r]) + "|\n";
         }
         return output;
+    }
+    
+    /**
+     * Finds a random point in the grid
+     * @return The point
+     */
+    protected Point randomLocation() {
+        return new Point((int)(Math.random() * (maxX - minX + 1) + minX), (int)(Math.random() * (maxY - minY + 1) + minY));
     }
 }

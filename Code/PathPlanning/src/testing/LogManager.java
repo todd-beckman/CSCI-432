@@ -11,7 +11,7 @@ import pathplanning.*;
 /**
  * An implementation of Logger that tracks an ordered list of reports and allows the logs to
  * be printed to file.
- * @author Dover
+ * @author Todd
  *
  */
 public class LogManager implements Logger {
@@ -27,15 +27,21 @@ public class LogManager implements Logger {
         Grid g = new RandomGrid(minX, maxX, minY, maxY, obstacles);
         
         System.out.println(g.visualize());
-        
+
+        LogManager aStarLogger = new LogManager();
+        LogManager dStarLogger = new LogManager();
         
         //  Construct the paths and their loggers
-//        Pather aStar = new AStar(minX, maxX, minY, maxY, g.getObstacles(), new LogManager());
-//        Pather dStarLite = new DStarLite(minX, maxX, minY, maxY, g.getObstacles(), new LogManager());
+        Pather aStar = new AStar(minX, maxX, minY, maxY, g.getObstacles(), aStarLogger);
+        Pather dStarLite = new DStarLite(minX, maxX, minY, maxY, g.getObstacles(), dStarLogger);
         
-        //  Pathfind
-//        aStar.pathfind(g.getStart(), g.getEnd());
-//        dStarLite.pathfind(g.getStart(), g.getEnd());
+        //  A* Pathfind
+        aStar.pathfind(g.getStart(), g.getEnd());
+        aStarLogger.writeToFile("astar.csv");
+        
+        //  D* Lite Pathfind
+        dStarLite.pathfind(g.getStart(), g.getEnd());
+        dStarLogger.writeToFile("dstarlite.csv");
     }
 
     

@@ -10,7 +10,7 @@ import pathplanning.util.Point;
 public class RandomGrid extends Grid {
     
     /**
-     * Constructs a grid with numObstacles obstacles placed in it randomly
+     * Usage is not recommended. Constructs a grid with numObstacles obstacles placed in it randomly
      * @param minX The farthest west legal coordinate
      * @param maxX The farthest east legal coordinate
      * @param minY The farthest south legal coordinate
@@ -34,9 +34,5 @@ public class RandomGrid extends Grid {
             while (obstacles.contains(p) || start.equals(p) || end.equals(p));
             addObstacle(p);
         }
-    }
-    
-    private Point randomLocation() {
-        return new Point((int)(Math.random() * (maxX - minX + 1) + minX), (int)(Math.random() * (maxY - minY + 1) + minY));
     }
 }
