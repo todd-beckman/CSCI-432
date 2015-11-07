@@ -12,7 +12,7 @@ import java.util.HashSet;
  *
  * @author Alex
  */
-public class AStar {
+public class DStarLite {
 
     //Using hashes instad of arrays for overall memory savings on sparse grids.
     //Minor memory losses on dense grids. <25%.
@@ -28,7 +28,7 @@ public class AStar {
     private static final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
     public int minX,minY,maxX,maxY;
     
-    public AStar(int minX, int maxX, int minY, int maxY, HashSet<Point> obs) {
+    public DStarLite(int minX, int maxX, int minY, int maxY, HashSet<Point> obs) {
         this.minX=minX;
         this.minY=minY;
         this.maxX=maxX;

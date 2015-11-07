@@ -18,7 +18,11 @@ public class Point {
         this.y=y;
     }
     
-    public double dist(Point p) {
+    /**
+     * @param p
+     * @return Euclidean distance squared
+     */
+    public int dist(Point p) {
         final int tx = p.x-x;
         final int ty = p.y-y;
         return tx*tx+ty*ty;
