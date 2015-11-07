@@ -5,10 +5,12 @@
  */
 package pathplanning;
 
+import pathplanning.util.Point;
+
 /**
  *
  * @author alexhuleatt
  */
 public interface Pather {
-    
+    Point[] pathfind(Point a, Point b);
 }
