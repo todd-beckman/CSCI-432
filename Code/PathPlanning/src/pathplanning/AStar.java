@@ -51,6 +51,7 @@ public class AStar implements Pather {
     public Point[] pathfind(Point start, Point finish) {
         prev = new HashMap<>();
         cost = new HashMap<>();
+        cost.put(finish, 0);
         index = 0;
         Point current;
         dest = start;
