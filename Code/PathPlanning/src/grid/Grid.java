@@ -46,9 +46,9 @@ public abstract class Grid {
     /**
      * Constructs a grid
      * @param minX The farthest west legal coordinate
-     * @param maxX The farthest east legal coordinate
+     * @param maxX The farthest east legal coordinate (exclusive)
      * @param minY The farthest south legal coordinate
-     * @param maxY The farthest north legal coordinate
+     * @param maxY The farthest north legal coordinate (exclusive)
      */
     public Grid(int minX, int maxX, int minY, int maxY) {
         obstacles = new HashSet<Point>();
@@ -103,12 +103,12 @@ public abstract class Grid {
      * @return
      */
     public String visualize() {
-        char[][] grid = new char[maxX - minX + 1][maxY - minY + 1];
+        char[][] grid = new char[maxX - minX][maxY - minY];
         if (start != null) grid[start.x][start.y] = 'S';
         if (end != null) grid[end.x][end.y] = 'E';
         String output = "";
-        for (int r = 0; r <= maxX - minX; r++) {
-            for (int c = 0; c <= maxY - minY; c++) {
+        for (int r = 0; r <= maxX - minX - 1; r++) {
+            for (int c = 0; c <= maxY - minY - 1; c++) {
                 Point p = new Point(r, c);
                 if ((start==null||!start.equals(p)) && (end==null||!end.equals(p))) {
                     if (obstacles.contains(p)) {
@@ -129,7 +129,7 @@ public abstract class Grid {
      * @return The point
      */
     protected Point randomLocation() {
-        return new Point((int)(Math.random() * (maxX - minX + 1) + minX), (int)(Math.random() * (maxY - minY + 1) + minY));
+        return new Point((int)(Math.random() * (maxX - minX) + minX), (int)(Math.random() * (maxY - minY) + minY));
     }
 
 }
