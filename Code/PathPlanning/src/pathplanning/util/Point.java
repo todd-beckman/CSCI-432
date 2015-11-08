@@ -12,7 +12,7 @@ package pathplanning.util;
 public class Point {
     public final int x;
     public final int y;
-    
+    private static final double sqrt2 = 1.41421356237;
     public Point(int x, int y) {
         this.x=x;
         this.y=y;
@@ -23,9 +23,12 @@ public class Point {
      * @return Euclidean distance squared
      */
     public int dist(Point p) {
-        final int tx = p.x-x;
-        final int ty = p.y-y;
-        return tx*tx+ty*ty;
+        int tx = Math.abs(p.x-x);
+        int ty = Math.abs(p.y-y);
+        int tp = Math.min(tx, ty); //number of diagonals
+        double tp2 = sqrt2*tp + (tx+ty) - tp;
+        return (int)Math.round(tp2); //close enough for my needs.
+        
     }
     
     @Override
