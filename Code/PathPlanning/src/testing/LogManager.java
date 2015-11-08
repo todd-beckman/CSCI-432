@@ -3,39 +3,59 @@ package testing;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 
+import grid.Grid;
+import grid.RandomGrid;
 import pathplanning.*;
-import pathplanning.util.*;
 
+/**
+ * An implementation of Logger that tracks an ordered list of reports and allows the logs to
+ * be printed to file.
+ * @author Todd
+ *
+ */
 public class LogManager implements Logger {
+    public static void main(String[] args) {
+        
+        //  Settings
+        int minX = 0;
+        int maxX = 10;
+        int minY = 0;
+        int maxY = 10;
+        int obstacles = 20;
+        
+        Grid g = new RandomGrid(minX, maxX, minY, maxY, obstacles);
+        
+        System.out.println(g.visualize());
+
+        LogManager aStarLogger = new LogManager();
+        LogManager dStarLogger = new LogManager();
+        
+        //  Construct the paths and their loggers
+        Pather aStar = new AStar(minX, maxX, minY, maxY, g.getObstacles(), aStarLogger);
+        Pather dStarLite = new DStarLite(minX, maxX, minY, maxY, g.getObstacles(), dStarLogger);
+        
+        //  A* Pathfind
+        aStar.pathfind(g.getStart(), g.getEnd());
+        aStarLogger.writeToFile("astar.csv");
+        
+        //  D* Lite Pathfind
+        dStarLite.pathfind(g.getStart(), g.getEnd());
+        dStarLogger.writeToFile("dstarlite.csv");
+    }
+
+    
+    
+    private final ArrayList<Log> logs = new ArrayList<Log>();
     
     /**
-     * The farthest left location in the grid
+     * Saves a log entry
      */
-    public static final int MIN_X = 0;
-    
-    /**
-     * The farthest right location in the grid
-     */
-    public static final int MAX_X = 100;
-    
-    /**
-     * The farthest up location in the grid
-     */
-    public static final int MIN_Y = 0;
-    
-    /**
-     * The farthest down location in the grid
-     */
-    public static final int MAX_Y = 100;
-    
     @Override
     public void report(String st, int... args) {
         logs.add(new Log(st, args));
     }
     
-    private final ArrayList<Log> logs = new ArrayList<Log>();
     
     /**
      * Writes the current logs to file
@@ -62,13 +82,5 @@ public class LogManager implements Logger {
             super.report(st, args);
             System.out.println(logs.get(logs.size() - 1).toString());
         }
-    }
-    
-    public static void main(String[] args) {
-        HashSet<Point> obs = new HashSet<Point>();
-
-        //  Construct the paths and their loggers
-        Pather aStar = new AStar(MIN_X, MAX_X, MIN_Y, MAX_Y, obs, new LogManager());
-        Pather dStarLite = new DStarLite(MIN_X, MAX_X, MIN_Y, MAX_Y, obs, new LogManager());
     }
 }

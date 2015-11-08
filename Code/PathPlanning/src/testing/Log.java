@@ -3,8 +3,9 @@ package testing;
 import java.util.ArrayList;
 
 /**
- * The Log class represents individual entries in log files.
  * 
+ * The Log class represents individual entries in log files.
+ * @author Todd
  */
 public class Log {
     /**
@@ -16,6 +17,12 @@ public class Log {
      * The relevant arguments
      */
     public final int[] args;
+    
+    /**
+     * 
+     * @param name
+     * @param args
+     */
     public Log(String name, int ... args) {
         this.name = name;
         this.args = args;
@@ -34,6 +41,9 @@ public class Log {
         return str;
     }
     
+    /**
+     * Converts a log into the format: name,arg0,arg1,etc
+     */
     @Override
     public String toString() {
         String str = name;
