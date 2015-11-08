@@ -169,6 +169,4 @@ public class AStar implements Pather {
      */
     public void addObs(Point p) {obs.add(p);}
 
-
-
 }

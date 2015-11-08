@@ -28,6 +28,7 @@ public class DStarLite implements Pather {
     public static final int MAX_PATH_LENGTH = 400;
     private final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
     public int minX,minY,maxX,maxY;
+    private Point begin;
     
     public final Logger callback;
     
@@ -169,6 +170,19 @@ public class DStarLite implements Pather {
      */
     public void addObs(Point p) {obs.add(p);}
 
-
+    public float getRHS(Point p){
+        if(p == begin){
+            return 0;
+        }
+        float min = Float.MAX_VALUE;
+        for(int i = 1; i <= 8; i++){
+            Point cur = moveTo(p,i);
+            int calc = cost.get(cur) + p.dist(cur);
+            if(calc < min){
+                min = calc;
+            }
+        }
+        return min;
+    }
 
 }
