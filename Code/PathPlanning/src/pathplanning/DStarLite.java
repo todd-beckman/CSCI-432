@@ -29,7 +29,7 @@ public class DStarLite implements Pather {
     private final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
     public int minX,minY,maxX,maxY;
     
-    public final Logger callback;
+    private final Logger callback;
     
     public DStarLite(int minX, int maxX, int minY, int maxY, HashSet<Point> obs, Logger callback) {
         this.minX=minX;
@@ -51,12 +51,13 @@ public class DStarLite implements Pather {
     public Point[] pathfind(Point start, Point finish) {
         prev = new HashMap<>();
         cost = new HashMap<>();
+        cost.put(finish, 0);
         index = 0;
         Point current;
         dest = start;
         final int desx = dest.x;
         final int desy = dest.y;
-        for (int i = 8; i != 0; --i) {
+        for (int i = 7; i != -1; --i) {
             check(finish, i);
         }
         while (index != 0) {
@@ -81,7 +82,7 @@ public class DStarLite implements Pather {
         int count = 0;
         int dir = 0;
         do {
-            int next = ((prev.get(current) + 3) & 7) + 1;
+            int next = ((prev.get(current) + 4) & 7);
             if (dir == 0 || next != dir) { //this minimizes the path.
                 temp[count++] = current;
                 dir = next;
@@ -104,13 +105,13 @@ public class DStarLite implements Pather {
         }
         check(p, dir);
         if ((dir & 1) == 0) { //is diagonal
-            check(p, ((dir + 6) & 7) + 1); //-1
-            check(p, (dir & 7) + 1); //+1
-            check(p, ((dir + 5) & 7) + 1);
-            check(p, ((dir + 1) & 7) + 1);
+            check(p, ((dir + 7) & 7)); //-1
+            check(p, ((dir+1) & 7)); //+1
+            check(p, ((dir + 6) & 7));
+            check(p, ((dir + 2) & 7));
         } else {
-            check(p, ((dir + 6) & 7) + 1);
-            check(p, (dir & 7) + 1);
+            check(p, ((dir + 7) & 7));
+            check(p, ((dir+1) & 7));
         }
     }
 
@@ -126,9 +127,10 @@ public class DStarLite implements Pather {
             return;
         }
         int potentialCost = cost.get(parent) + parent.dist(n);
-        if (prev.get(n) == 0 || cost.get(n) > potentialCost) {
+        if (!prev.containsKey(n)) { // || cost.get(n) > potentialCost
             int dis = n.dist(dest);
             if (callback != null) callback.report("set", n.x,n.y,parent.x,parent.y, potentialCost, dis);
+            if (callback != null) callback.report("push", n.x,n.y);
             q.add(n, dis + potentialCost);
             prev.put(n,dir);
             cost.put(n,potentialCost);
@@ -144,19 +146,19 @@ public class DStarLite implements Pather {
      */
     private static Point moveTo(Point p, int d) {
         switch (d) {
-            case 1:
+            case 0:
                 return new Point(p.x, p.y - 1);
-            case 2:
+            case 1:
                 return new Point(p.x + 1, p.y - 1);
-            case 3:
+            case 2:
                 return new Point(p.x + 1, p.y);
-            case 4:
+            case 3:
                 return new Point(p.x + 1, p.y + 1);
-            case 5:
+            case 4:
                 return new Point(p.x, p.y + 1);
-            case 6:
+            case 5:
                 return new Point(p.x - 1, p.y + 1);
-            case 7:
+            case 6:
                 return new Point(p.x - 1, p.y);
             default:
                 return new Point(p.x - 1, p.y - 1);

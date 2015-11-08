@@ -23,7 +23,6 @@ public class AStar implements Pather {
     private HashMap<Point,Integer> cost;
     
     private final PointIntHeap q = new PointIntHeap(8000); //Allocate early.
-    private int index;
     private Point dest;
     public static final int MAX_PATH_LENGTH = 400;
     private final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
@@ -52,7 +51,6 @@ public class AStar implements Pather {
         prev = new HashMap<>();
         cost = new HashMap<>();
         cost.put(finish, 0);
-        index = 0;
         Point current;
         dest = start;
         final int desx = dest.x;
@@ -60,8 +58,10 @@ public class AStar implements Pather {
         for (int i = 8; i != 0; --i) {
             check(finish, i);
         }
-        while (index != 0) {
+        while (!q.isEmpty()) {
+            
             current = q.pop();
+            
             if (callback != null) callback.report("pop",current.x,current.y);
             if (current.x == desx && current.y == desy) {
                 return reconstruct();
@@ -82,13 +82,13 @@ public class AStar implements Pather {
         int count = 0;
         int dir = 0;
         do {
-            int next = ((prev.get(current) + 3) & 7) + 1;
+            int next = ((prev.get(current) + 3) & 7)+1;
             if (dir == 0 || next != dir) { //this minimizes the path.
                 temp[count++] = current;
                 dir = next;
             }
             current = moveTo(current, next);
-        } while (prev.get(current) != 0);
+        } while (prev.containsKey(current));
         temp[count++] = current;
         final Point[] path = new Point[count];
         System.arraycopy(temp, 0, path, 0, count);
@@ -111,7 +111,7 @@ public class AStar implements Pather {
             check(p, ((dir + 1) & 7) + 1);
         } else {
             check(p, ((dir + 6) & 7) + 1);
-            check(p, (dir & 7) + 1);
+            check(p, ((dir) & 7)+ 1);
         }
     }
 
@@ -127,9 +127,10 @@ public class AStar implements Pather {
             return;
         }
         int potentialCost = cost.get(parent) + parent.dist(n);
-        if (prev.get(n) == 0) { // || cost.get(n) > potentialCost
+        if (!prev.containsKey(n)) { // || cost.get(n) > potentialCost
             int dis = n.dist(dest);
             if (callback != null) callback.report("set", n.x,n.y,parent.x,parent.y, potentialCost, dis);
+            if (callback != null) callback.report("push", n.x,n.y);
             q.add(n, dis + potentialCost);
             prev.put(n,dir);
             cost.put(n,potentialCost);

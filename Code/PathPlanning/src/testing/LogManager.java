@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import grid.Grid;
 import grid.RandomGrid;
+import java.util.Arrays;
 import pathplanning.*;
 
 /**
@@ -36,7 +37,7 @@ public class LogManager implements Logger {
         Pather dStarLite = new DStarLite(minX, maxX, minY, maxY, g.getObstacles(), dStarLogger);
         
         //  A* Pathfind
-        aStar.pathfind(g.getStart(), g.getEnd());
+        System.out.println(Arrays.toString(aStar.pathfind(g.getStart(), g.getEnd())));
         aStarLogger.writeToFile("astar.csv");
         
         //  D* Lite Pathfind
