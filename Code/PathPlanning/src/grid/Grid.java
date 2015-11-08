@@ -104,13 +104,13 @@ public abstract class Grid {
      */
     public String visualize() {
         char[][] grid = new char[maxX - minX + 1][maxY - minY + 1];
-        grid[start.x][start.y] = 'S';
-        grid[end.x][end.y] = 'E';
+        if (start != null) grid[start.x][start.y] = 'S';
+        if (end != null) grid[end.x][end.y] = 'E';
         String output = "";
         for (int r = 0; r <= maxX - minX; r++) {
             for (int c = 0; c <= maxY - minY; c++) {
                 Point p = new Point(r, c);
-                if (!start.equals(p) && !end.equals(p)) {
+                if ((start==null||!start.equals(p)) && (end==null||!end.equals(p))) {
                     if (obstacles.contains(p)) {
                         grid[r][c] = 'X';
                     }
@@ -131,4 +131,5 @@ public abstract class Grid {
     protected Point randomLocation() {
         return new Point((int)(Math.random() * (maxX - minX + 1) + minX), (int)(Math.random() * (maxY - minY + 1) + minY));
     }
+
 }

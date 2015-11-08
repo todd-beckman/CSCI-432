@@ -127,7 +127,7 @@ public class AStar implements Pather {
             return;
         }
         int potentialCost = cost.get(parent) + parent.dist(n);
-        if (prev.get(n) == 0 || cost.get(n) > potentialCost) {
+        if (prev.get(n) == 0) { // || cost.get(n) > potentialCost
             int dis = n.dist(dest);
             if (callback != null) callback.report("set", n.x,n.y,parent.x,parent.y, potentialCost, dis);
             q.add(n, dis + potentialCost);
