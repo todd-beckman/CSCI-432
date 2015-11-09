@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import grid.Grid;
 import grid.RandomGrid;
+import grid.WTFGrid;
+import java.io.BufferedWriter;
 import java.util.Arrays;
 import pathplanning.*;
 
@@ -20,29 +22,30 @@ public class LogManager implements Logger {
         
         //  Settings
         int minX = 0;
-        int maxX = 10;
+        int maxX = 100;
         int minY = 0;
-        int maxY = 10;
-        int obstacles = 20;
+        int maxY = 100;
+        //int obstacles = 20;
         
-        Grid g = new RandomGrid(minX, maxX, minY, maxY, obstacles);
+        Grid g = new WTFGrid(minX, maxX, minY, maxY);
         
         System.out.println(g.visualize());
 
         LogManager aStarLogger = new LogManager();
-        LogManager dStarLogger = new LogManager();
+        //LogManager dStarLogger = new LogManager();
         
         //  Construct the paths and their loggers
         Pather aStar = new AStar(minX, maxX, minY, maxY, g.getObstacles(), aStarLogger);
-        Pather dStarLite = new DStarLite(minX, maxX, minY, maxY, g.getObstacles(), dStarLogger);
-        
+        //Pather dStarLite = new DStarLite(minX, maxX, minY, maxY, g.getObstacles(), dStarLogger);
+        long t = System.currentTimeMillis();
         //  A* Pathfind
         System.out.println(Arrays.toString(aStar.pathfind(g.getStart(), g.getEnd())));
-        aStarLogger.writeToFile("astar.csv");
+        System.out.println(System.currentTimeMillis()-t);
+//       aStarLogger.writeToFile("astar.csv");
         
         //  D* Lite Pathfind
-        dStarLite.pathfind(g.getStart(), g.getEnd());
-        dStarLogger.writeToFile("dstarlite.csv");
+//        dStarLite.pathfind(g.getStart(), g.getEnd());
+//        dStarLogger.writeToFile("dstarlite.csv");
     }
 
     
@@ -65,8 +68,9 @@ public class LogManager implements Logger {
     public void writeToFile(String filename) {
         try {
             FileWriter writer = new FileWriter(filename);
-            writer.write(Log.bulkToString(logs));
-            writer.close();
+            BufferedWriter bw = new BufferedWriter(writer);
+            bw.write(Log.bulkToString(logs));
+            bw.close();
         }
         catch (IOException e) {
             System.out.println("Could not write to " + filename + ". Printing to console instead.");
