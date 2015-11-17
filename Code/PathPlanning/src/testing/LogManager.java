@@ -25,11 +25,18 @@ public class LogManager implements Logger {
         int maxX = 100;
         int minY = 0;
         int maxY = 100;
-        //int obstacles = 20;
-        
+
         Grid g = new WTFGrid(minX, maxX, minY, maxY);
         
         System.out.println(g.visualize());
+        
+        try
+        {
+            FileWriter f = new FileWriter("logs.txt");
+            f.write(g.visualize());
+            f.close();
+        }
+        catch(Exception e){}
 
         LogManager aStarLogger = new LogManager();
         //LogManager dStarLogger = new LogManager();
