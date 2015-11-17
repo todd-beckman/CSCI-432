@@ -62,6 +62,17 @@ public class WTFGrid extends Grid {
                 }
             }
         }
+        
+        start = randomLocation();
+        HashSet<Point> obs = getObstacles();
+        while (obs.contains(start)) {
+            start = randomLocation();
+        }
+        end = randomLocation();
+        while (obs.contains(end)) {
+            end = randomLocation();
+        }
+        
 
     }
 
