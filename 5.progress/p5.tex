@@ -1,9 +1,15 @@
 \documentclass{article}
-
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{hyperref}
 
 \graphicspath{{img/}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
 
 \begin{document}
 
@@ -14,7 +20,7 @@
 
 \section{Pathfinding Progress}
 
-The A* implementation has been made, and using it, a testing framework. A* 
+The A* implementation has been made, as well as a testing framework. A* 
 accepts a map in the form of an $x$ domain and $y$ range to define the bounds
 and a list (HashSet) of obstacle locations and returns a path as the set of
 significant points. The agent will, according to its current knowledge of the
@@ -25,24 +31,24 @@ many types of graphs, to be explained later.
 In order to keep as much of the testing consistent, D* Lite implementation
 began as a direct copy of A*. Building off of this starting point rather than
 implementing the algorithm from scratch allows for individual programming
-decisions to play a minimal in the result of the overall program. Though
-the D* Lite program is not fully functional according to its documentation,
+decisions to have a minimal impact in the result of the overall program. Though
+the D* Lite program is not fully functional according to its documentation yet,
 it logs all of the same events as A*.
 
 \section{Map Progress}
 
 The original A* program was run and tested using maps provided by MIT's
-BattleCode. Due to its flexible structure, it was easily adapted to our
-own map generator. Thanks to a complete accident regarding a still-unknown
-bug in the implementation of a maze-generating algorithm, we have stumbled
-upon what Alex calls ``WTF Grid'', a very realistic-looking map generator.
+BattleCode (\url{https://www.battlecode.org/info/}). Due to its flexible structure, 
+it was easily adapted to our own map generator. Thanks to a complete accident 
+regarding a still-unknown bug in the implementation of a maze-generating algorithm, 
+we have stumbled upon what Alex calls ``WTF Grid'', a very realistic-looking map generator.
 Figure 1 demonstrates this.
 
 \section{Framework}
 
 A lightweight testing framework was also implemented. This framework allows
 the programs to log their choice of events as they run. Node comparisons,
-path insertions, and heuristic calculations are to name a few. The actual
+path insertions, and heuristic calculations to name a few. The actual
 events logged are completely determined by programs importing it, and this
 testing framework could theoretically be exported to its own library to be
 used for other projects. The output is currently a comma separated value
