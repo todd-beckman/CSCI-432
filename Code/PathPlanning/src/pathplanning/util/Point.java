@@ -9,9 +9,12 @@ package pathplanning.util;
  *
  * @author alexhuleatt
  */
-public class Point {
+public class Point implements Comparable {
     public final int x;
     public final int y;
+    public int cost;
+    public Pair<Integer,Integer> pairCost;
+    public boolean usePair = false;
     private static final double sqrt2 = 1.41421356237;
     public Point(int x, int y) {
         this.x=x;
@@ -56,5 +59,26 @@ public class Point {
     @Override
     public String toString() {
         return "("+x+","+y+")";
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (!(o instanceof Point)) return 0;
+        if (!usePair) return cost - ((Point)o).cost;
+        else {
+            Point p = (Point)o;
+            int k1 = pairCost.a;
+            int k2 = pairCost.b;
+            int pk1 = p.pairCost.a;
+            int pk2 = p.pairCost.b;
+            
+            if (k1 < pk1) {
+                return -1;
+            } else if (k1 > pk1) {
+                return 1;
+            } else {
+                return k2 - pk2;
+            }
+        }
     }
 }
