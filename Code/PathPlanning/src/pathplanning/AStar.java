@@ -5,6 +5,7 @@ package pathplanning;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.util.Arrays;
 import pathplanning.util.Point;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,9 +19,9 @@ public class AStar implements Pather {
     //Using hashes instad of arrays for overall memory savings on sparse grids.
     //Minor memory losses on dense grids. <25%.
     //Java hashmap loadfactor to resize = ~.75
-    private final HashSet<Point> obs;
-    private final HashMap<Point, Integer> prev;
-    private final HashMap<Point, Integer> cost;
+    private final HashSet<Point> obs; //set of obstacles
+    private final HashMap<Point, Integer> prev; //Map for pointing to parent
+    private final HashMap<Point, Integer> cost; //Map holding cost of point
 
     private final PointIntHeap q = new PointIntHeap(16000); //Allocate early.
     private Point dest;
@@ -29,7 +30,18 @@ public class AStar implements Pather {
     public int minX, minY, maxX, maxY;
 
     private final Logger callback;
+    public final Point[] path_buffer;
 
+    /**
+     *
+     * @param minX
+     * @param maxX
+     * @param minY
+     * @param maxY
+     * @param obs
+     * @param callback Logger to receive logging information. This info is
+     * probably not useful to most people.
+     */
     public AStar(int minX, int maxX, int minY, int maxY, HashSet<Point> obs, Logger callback) {
         this.minX = minX;
         this.minY = minY;
@@ -39,8 +51,17 @@ public class AStar implements Pather {
         this.callback = callback;
         this.prev = new HashMap<>();
         this.cost = new HashMap<>();
+        this.path_buffer = null;
     }
 
+    /**
+     *
+     * @param minX
+     * @param maxX
+     * @param minY
+     * @param maxY
+     * @param obs HashSet of obstacles.
+     */
     public AStar(int minX, int maxX, int minY, int maxY, HashSet<Point> obs) {
         this.minX = minX;
         this.minY = minY;
@@ -50,6 +71,52 @@ public class AStar implements Pather {
         this.prev = new HashMap<>();
         this.cost = new HashMap<>();
         this.callback = null;
+        this.path_buffer = null;
+    }
+
+    /**
+     *
+     * @param minX
+     * @param maxX
+     * @param minY
+     * @param maxY
+     * @param obs HashSet of obstacles
+     * @param path_buffer Array to hold path after reconstruction.
+     */
+    public AStar(int minX, int maxX, int minY, int maxY, HashSet<Point> obs, Point[] path_buffer) {
+        this.minX = minX;
+        this.minY = minY;
+        this.maxX = maxX;
+        this.maxY = maxY;
+        this.obs = obs;
+        this.prev = new HashMap<>();
+        this.cost = new HashMap<>();
+        this.callback = null;
+        this.path_buffer = path_buffer;
+    }
+
+    public AStar(HashSet<Point> obs) {
+        this.obs = obs;
+        this.minX = Integer.MIN_VALUE;
+        this.minY = Integer.MIN_VALUE;
+        this.maxX = Integer.MAX_VALUE;
+        this.maxY = Integer.MAX_VALUE;
+        this.prev = new HashMap<>();
+        this.cost = new HashMap<>();
+        this.callback = null;
+        this.path_buffer = null;
+    }
+
+    public AStar() {
+        this.obs = new HashSet<>();
+        this.minX = Integer.MIN_VALUE;
+        this.minY = Integer.MIN_VALUE;
+        this.maxX = Integer.MAX_VALUE;
+        this.maxY = Integer.MAX_VALUE;
+        this.prev = new HashMap<>();
+        this.cost = new HashMap<>();
+        this.callback = null;
+        this.path_buffer = null;
     }
 
     /**
@@ -100,8 +167,9 @@ public class AStar implements Pather {
         Point current = dest;
         int count = 0;
         int dir = 0;
+        int next;
         do {
-            int next = ((prev.get(current) + 4) & 7);
+            next = ((prev.get(current) + 4) & 7);
             if (dir == 0 || next != dir) { //this minimizes the path.
                 temp[count++] = current;
                 dir = next;
@@ -109,13 +177,21 @@ public class AStar implements Pather {
             current = moveTo(current, next);
         } while (prev.containsKey(current));
         temp[count++] = current;
+        if (path_buffer != null && path_buffer.length > count) {
+            System.arraycopy(temp, 0, path_buffer, 0, count);
+            Arrays.fill(path_buffer, count, path_buffer.length, null);
+            return path_buffer;
+        }
         final Point[] path = new Point[count];
         System.arraycopy(temp, 0, path, 0, count);
         return path;
     }
 
-    //Optimization inspired by JPS.
-    //Branching factor of ~3, instead of ~7.
+    /**
+     * This takes a single point and checks all it's neighbors for viability.
+     *
+     * @param p Point (Vertex) to expand.
+     */
     private void expand(Point p) {
         if (callback != null) {
             callback.report("expand", p.x, p.y);
@@ -137,11 +213,12 @@ public class AStar implements Pather {
     }
 
     /**
-     * Uses Euclidean distance squared as heuristic, allowing us to keep
-     * everything as ints.
+     * Checks a child vertex to potentially set it's value and add to queue.
+     * Uses distance (see point for definition of "distance" from point to goal
+     * as heuristic.
      *
-     * @param parent
-     * @param dir
+     * @param parent Parent vertex
+     * @param dir direction to some child of parent.
      */
     private void check(Point parent, int dir) {
         if (callback != null) {
@@ -149,6 +226,7 @@ public class AStar implements Pather {
         }
         final Point n = moveTo(parent, dir);
         if (obs.contains(n)) {
+            callback.report("obs", n.x,n.y);
             return;
         }
         int potentialCost = cost.get(parent) + parent.dist(n);
@@ -195,9 +273,10 @@ public class AStar implements Pather {
     }
 
     /**
-     * New obstacle will be considered on next run.
-     * If you modify the original obs HashSet, that also works. 
-     * This allows you to not maintain a reference to it.
+     * New obstacle will be considered on next run. If you modify the original
+     * obs HashSet, that also works. This allows you to not maintain a reference
+     * to it.
+     *
      * @param p
      */
 <<<<<<< HEAD
@@ -208,4 +287,17 @@ public class AStar implements Pather {
     }
 >>>>>>> 695dec1113618bc1e622f73a2c10783e276b6172
 
+    /**
+     * int dx1 = current.x - goal.x;
+     *
+     * int dy1 = current.y - goal.y;
+     *
+     * int dx2 = start.x - goal.x;
+     *
+     * int dy2 = start.y - goal.y;
+     *
+     * int cross = abs(dx1*dy2 - dx2*dy1);
+     *
+     * int heuristic += cross*0.001;
+     */
 }

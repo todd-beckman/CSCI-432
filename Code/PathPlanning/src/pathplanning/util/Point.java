@@ -19,8 +19,12 @@ public class Point {
     }
     
     /**
+     * Octile distance rounded down.
+     * Euclidean distance squared does not satisfy the triangle inequality and is not a valid metric.
+     * This is really meant for path planning, where this is "good enough"
+     * Didn't want to calculate square root. 3Expensive5Me.
      * @param p
-     * @return Euclidean distance squared
+     * @return 
      */
     public int dist(Point p) {
         int tx = Math.abs(p.x-x);
