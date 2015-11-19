@@ -9,6 +9,7 @@ import java.util.Arrays;
 import pathplanning.util.Point;
 import java.util.HashMap;
 import java.util.HashSet;
+import pathplanning.util.Heap;
 
 /**
  *
@@ -23,7 +24,7 @@ public class AStar implements Pather {
     private final HashMap<Point, Integer> prev; //Map for pointing to parent
     private final HashMap<Point, Integer> cost; //Map holding cost of point
 
-    private final PointIntHeap q = new PointIntHeap(16000); //Allocate early.
+    private final Heap<Point> q = new Heap<>(16000); //Allocate early.
     private Point dest;
     public static final int MAX_PATH_LENGTH = 10000;
     private final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
@@ -140,7 +141,7 @@ public class AStar implements Pather {
         for (int i = 7; i != -1; --i) {
             check(finish, i);
         }
-        while (!q.isEmpty()) {
+        while (q.len() != 0) {
             current = q.pop();
 
             if (callback != null) {
@@ -238,7 +239,8 @@ public class AStar implements Pather {
             if (callback != null) {
                 callback.report("push", n.x, n.y);
             }
-            q.add(n, dis + potentialCost);
+            n.cost = dis + potentialCost;
+            q.insert(n);
             prev.put(n, dir);
             cost.put(n, potentialCost);
         }
