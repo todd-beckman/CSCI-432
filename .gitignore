@@ -1,3 +1,5 @@
 auxfiles/
 *.pdf
 *.bat
+/Code/PathPlanning/build/
+logs.txt
