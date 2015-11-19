@@ -22,14 +22,14 @@ public class LogManager implements Logger {
         
         //  Settings
         int minX = 0;
-        int maxX = 100;
+        int maxX = 4000;
         int minY = 0;
-        int maxY = 100;
+        int maxY = 4000;
         //int obstacles = 20;
         
         Grid g = new WTFGrid(minX, maxX, minY, maxY);
         
-        System.out.println(g.visualize());
+//        System.out.println(g.visualize());
 
         LogManager aStarLogger = new LogManager();
         //LogManager dStarLogger = new LogManager();
@@ -41,7 +41,7 @@ public class LogManager implements Logger {
         //  A* Pathfind
         System.out.println(Arrays.toString(aStar.pathfind(g.getStart(), g.getEnd())));
         System.out.println(System.currentTimeMillis()-t);
-//       aStarLogger.writeToFile("astar.csv");
+       aStarLogger.writeToFile("astar.csv");
         
         //  D* Lite Pathfind
 //        dStarLite.pathfind(g.getStart(), g.getEnd());

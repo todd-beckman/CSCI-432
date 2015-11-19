@@ -8,8 +8,8 @@ package pathplanning;
 import pathplanning.util.Point;
 
 /**
- * A quick and dirty array-based heap implementation, designed for use as a
- * priority queue.
+ * A quick and dirty array-based binary min-heap implementation, designed for
+ * use as a priority queue. Not dynamic, it is very fast though.
  *
  * @author alexhuleatt
  */
@@ -100,13 +100,7 @@ public class PointIntHeap {
     }
 
     public void decrease_key(Point p, int new_cost) {
-        int dex = getIndex(p);
-        costs[dex] = new_cost;
-        while (costs[dex / 2] > new_cost) {
-            swap(dex, dex / 2);
-            dex = dex / 2;
-        }
-
+        decrease_key(getIndex(p), new_cost);
     }
 
     public void decrease_key(int dex, int new_cost) {
@@ -119,11 +113,7 @@ public class PointIntHeap {
     }
 
     public void increase_key(Point p, int new_cost) {
-        int pos = getIndex(p);
-        for (; pos > 0 && new_cost < costs[pos / 2]; pos /= 2) { //heapify
-            costs[pos] = costs[pos / 2];
-            points[pos] = points[pos / 2];
-        }
+        increase_key(getIndex(p), new_cost);
     }
 
     public void increase_key(int pos, int new_cost) {
