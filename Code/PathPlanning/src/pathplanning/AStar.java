@@ -279,13 +279,7 @@ public class AStar implements Pather {
      *
      * @param p
      */
-<<<<<<< HEAD
     public void addObs(Point p) {obs.add(p);}
-=======
-    public void addObs(Point p) {
-        obs.add(p);
-    }
->>>>>>> 695dec1113618bc1e622f73a2c10783e276b6172
 
     /**
      * int dx1 = current.x - goal.x;
