@@ -65,17 +65,23 @@ public class Heap<E extends Comparable> {
         E curr = (E) arr[index];
         while (true) {
             int chi = index * 2 + 1; //check left child
-            if (chi >= len) break;
+            if (chi >= len) {
+                break;
+            }
             if (arr[chi].compareTo(curr) < 0) {
                 swap(chi, index);
                 index = chi;
             } else {
                 ++chi; //check right child
-                if (chi >= len) break;
+                if (chi >= len) {
+                    break;
+                }
                 if (arr[chi].compareTo(curr) < 0) {
                     swap(chi, index);
                     index = chi;
-                } else break;
+                } else {
+                    break;
+                }
             }
 
         }
@@ -88,7 +94,9 @@ public class Heap<E extends Comparable> {
             if (arr[par].compareTo(arr[index]) > 0) {
                 swap(par, index);
                 index = par;
-            } else return;
+            } else {
+                return;
+            }
         }
     }
 
@@ -105,5 +113,15 @@ public class Heap<E extends Comparable> {
         return s;
     }
 
-    public int len() {return len;}
+    public int len() {
+        return len;
+    }
+
+    public E peek() {
+        if (len == 0) {
+            return null;
+        }
+        E toR = (E) arr[0];
+        return toR;
+    }
 }

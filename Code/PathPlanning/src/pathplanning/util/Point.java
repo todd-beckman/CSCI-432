@@ -58,12 +58,15 @@ public class Point implements Comparable {
     
     @Override
     public String toString() {
-        return "("+x+","+y+")";
+        return "("+x+","+y+"):"+ ((usePair)?pairCost:cost);
     }
 
     @Override
     public int compareTo(Object o) {
-        if (!(o instanceof Point)) return 0;
+        if (!(o instanceof Point)) {
+            System.out.println("wat");
+            return 0;
+        }
         if (!usePair) return cost - ((Point)o).cost;
         else {
             Point p = (Point)o;

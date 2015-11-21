@@ -21,18 +21,19 @@ public class DStarLite implements Pather {
     //Minor memory losses on dense grids. <25%.
     //Java hashmap loadfactor to resize = ~.75
     private final HashSet<Point> obs;
-    private HashMap<Point, Integer> prev;
-    private HashMap<Point, Integer> cost;
+    public HashMap<Point, Integer> cost;
     private HashMap<Point, Integer> RHS;
     private HashSet<Point> closed_set;
 
     private final Heap<Point> q = new Heap(8000); //Allocate early.
     private int index;
-    private Point dest;
+    private Point last_point;
+    private Point first_point;
     public static final int MAX_PATH_LENGTH = 400;
     private final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
     public int minX, minY, maxX, maxY;
-    private Point begin;
+    public static int myMAX = 1000000;
+    
 
     private final Logger callback;
 
@@ -43,6 +44,8 @@ public class DStarLite implements Pather {
         this.maxY = maxY;
         this.obs = obs;
         this.callback = callback;
+        RHS = new HashMap<>();
+        closed_set = new HashSet<>();
     }
 
     /**
@@ -55,84 +58,57 @@ public class DStarLite implements Pather {
      */
     @Override
     public Point[] pathfind(Point start, Point finish) {
-        prev = new HashMap<>();
         cost = new HashMap<>();
-        cost.put(finish, 0);
-        index = 0;
+        
+        cost.put(finish, myMAX);
+        RHS.put(finish, 0);
+        cost.put(start, myMAX);
+        RHS.put(start, myMAX);
+        q.insert(finish);
         Point current;
-        dest = start;
-        final int desx = dest.x;
-        final int desy = dest.y;
-        for (int i = 7; i != -1; --i) {
-            check(finish, i);
-        }
-        while (index != 0) { //change while case
-            
+        last_point = start;
+        first_point = finish;
+        first_point.pairCost=getKey(first_point);
+        first_point.usePair=true;
+        
+        last_point.pairCost=getKey(last_point);
+        last_point.usePair = true;
+        
+        
+        while (q.len() > 0 && (q.peek().compareTo(last_point) < 0 || 
+                getRHS(last_point) != cost.get(last_point))) { //change while case
             do {
                 current = q.pop();
             } while (closed_set.contains(current));
+            
+            if (current == null) break;
             int rhs = getRHS(current);
             if (cost.get(current) > rhs) {
                 cost.put(current,rhs);
             } else {
-                cost.put(current, Integer.MAX_VALUE);
+                cost.put(current, myMAX);
                 
                 updateState(current);
             }
             if (callback != null) {
                 callback.report("pop", current.x, current.y);
             }
-
             expand(current);
+            //System.out.println(q.peek());
+            //System.out.println(q + " " + getKey(first_point) + " ");
         }
         return null;
     }
 
-    /**
-     * Reconstruct the path.
-     *
-     * @return
-     */
-    private Point[] reconstruct() {
-        if (callback != null) {
-            callback.report("reconstruct");
-        }
-        Point current = dest;
-        int count = 0;
-        int dir = 0;
-        do {
-            int next = ((prev.get(current) + 4) & 7);
-            if (dir == 0 || next != dir) { //this minimizes the path.
-                temp[count++] = current;
-                dir = next;
-            }
-            current = moveTo(current, next);
-        } while (prev.get(current) != 0);
-        temp[count++] = current;
-        final Point[] path = new Point[count];
-        System.arraycopy(temp, 0, path, 0, count);
-        return path;
-    }
-
-    //Optimization inspired by JPS.
-    //Branching factor of ~3, instead of ~7.
     private void expand(Point p) {
         if (callback != null) {
             callback.report("expand", p.x, p.y);
         }
-        final int dir = prev.get(p);
-        if (dir == 0 || !(p.x < maxX && p.y < maxY && p.x >= minX && p.y >= minY)) {
+        if (!(p.x < maxX && p.y < maxY && p.x >= minX && p.y >= minY)) {
             return;
         }
-        check(p, dir);
-        if ((dir & 1) == 0) { //is diagonal
-            check(p, ((dir + 7) & 7)); //-1
-            check(p, ((dir + 1) & 7)); //+1
-            check(p, ((dir + 6) & 7));
-            check(p, ((dir + 2) & 7));
-        } else {
-            check(p, ((dir + 7) & 7));
-            check(p, ((dir + 1) & 7));
+        for (int i = 0; i < 8; i++) {
+            check(p,i);
         }
     }
 
@@ -189,13 +165,25 @@ public class DStarLite implements Pather {
     }
 
     public int getRHS(Point p) {
-        if (p == begin) {
+        if (obs.contains(p)) return myMAX;
+        if (p.equals(first_point)) {
             return 0;
         }
-        int min = Integer.MAX_VALUE;
-        for (int i = 1; i <= 8; i++) {
+        int min = myMAX;
+        int calc;
+        for (int i = 0; i < 8; i++) {
             Point cur = moveTo(p, i);
-            int calc = cost.get(cur) + p.dist(cur);
+            if (!cost.containsKey(cur)) {
+                calc = myMAX;
+            } else {
+                int t_cost = cost.get(cur);
+                if (t_cost >= myMAX) {
+                    calc = t_cost;
+                }
+                else {
+                    calc = cost.get(cur) + p.dist(cur);
+                }
+            }
             if (calc < min) {
                 min = calc;
             }
@@ -204,16 +192,19 @@ public class DStarLite implements Pather {
     }
 
     public Pair<Integer, Integer> getKey(Point p) {
+        if (obs.contains(p)) {
+            return new Pair<>(myMAX,myMAX);
+        }
         return new Pair<>(
-                Math.min(cost.get(p), getRHS(p)) + dest.dist(p),
+                Math.min(cost.get(p), getRHS(p)) + last_point.dist(p),
                 Math.min(cost.get(p), getRHS(p)));
     }
     
     public void updateState(Point p) {
         if (!cost.containsKey(p)) {
-            cost.put(p,Integer.MAX_VALUE);
+            cost.put(p,myMAX);
         }
-        if (!p.equals(dest)) {
+        if (!p.equals(last_point)) {
             RHS.put(p,getRHS(p));
         }
         if (!closed_set.contains(p)) {
@@ -224,6 +215,7 @@ public class DStarLite implements Pather {
             p.pairCost = getKey(p);
             p.usePair = true;
             q.insert(p);
+            closed_set.remove(p);
         }
     }
 
