@@ -25,7 +25,7 @@ public class DStarLite implements Pather {
     private HashMap<Point, Integer> RHS;
     private HashSet<Point> closed_set;
 
-    private final Heap<Point> q = new Heap(8000); //Allocate early.
+    private final Heap<Point> q = new Heap(80000); //Allocate early.
     private int index;
     private Point last_point;
     private Point first_point;
@@ -94,8 +94,6 @@ public class DStarLite implements Pather {
                 callback.report("pop", current.x, current.y);
             }
             expand(current);
-            //System.out.println(q.peek());
-            //System.out.println(q + " " + getKey(first_point) + " ");
         }
         return null;
     }

@@ -6,6 +6,10 @@
 package pathplanning;
 
 import grid.WTFGrid;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,7 +21,7 @@ import pathplanning.util.Point;
  */
 public class Test {
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
 //        Logger stdoutLogger = new Logger() {
 //            @Override
 //            public void report(String st, int... args) {
@@ -28,7 +32,7 @@ public class Test {
 //        AStar a = new AStar(0, 100, 0, 100, new HashSet<Point>(), stdoutLogger);
 //        
 //        a.pathfind(new Point(0,0), new Point(75,75));
-        int sz = 30;
+        int sz = 1000;
         WTFGrid msg = new WTFGrid(0,sz,0,sz);
         DStarLite dstrlt = new DStarLite(0, sz, 0, sz, msg.getObstacles(), null);
         dstrlt.pathfind(msg.getStart(), msg.getEnd());
@@ -43,14 +47,15 @@ public class Test {
                 }
                 else if (p.equals(msg.getEnd())) {
                     arrrrrrrr[p.x][p.y] = "E";
-                }
-                else {
+                } else if (val == DStarLite.myMAX) {
+                    arrrrrrrr[p.x][p.y] = "X";
+                } else {
                     arrrrrrrr[p.x][p.y] = ""+val;
                 }
             }
         }
         
-        PrettyPrinter pp = new PrettyPrinter(System.out);
+        PrettyPrinter pp = new PrettyPrinter(new PrintStream(new File("Out.txt")));
         pp.print(arrrrrrrr);
         
     }
