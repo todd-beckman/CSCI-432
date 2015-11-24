@@ -24,10 +24,10 @@ public class LogManager implements Logger {
 
         //  Settings
         int minX = 0;
-        int maxX = 4000;
+        int maxX = 10;
         int minY = 0;
 
-        int maxY = 100;
+        int maxY = 10;
 
         Grid g = new WTFGrid(minX, maxX, minY, maxY);
 
@@ -40,15 +40,15 @@ public class LogManager implements Logger {
         } catch (Exception e) {
         }
         LogManager aStarLogger = new LogManager();
-        //LogManager dStarLogger = new LogManager();
+        LogManager dStarLogger = new LogManager();
 
         //  Construct the paths and their loggers
         AStar aStar = new AStar(minX, maxX, minY, maxY, g.getObstacles(), aStarLogger);
-        //Pather dStarLite = new DStarLite(minX, maxX, minY, maxY, g.getObstacles(), dStarLogger);
-        long t = System.currentTimeMillis();
-        //  A* Pathfind
-        System.out.println(Arrays.toString(aStar.pathfind(g.getStart(), g.getEnd())));
-        System.out.println(System.currentTimeMillis() - t);
+        DStarLite dStarLite = new DStarLite(minX, maxX, minY, maxY, g.getObstacles(), dStarLogger);
+        
+        System.out.println("A*: " + Arrays.toString(aStar.pathfind(g.getStart(), g.getEnd())));
+        System.out.println("D*Lite: " + Arrays.toString(dStarLite.pathfind(g.getStart(), g.getEnd())));
+
         aStarLogger.writeToFile("astar.csv");
 
         //  D* Lite Pathfind
