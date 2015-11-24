@@ -20,7 +20,7 @@ import pathplanning.util.Point;
  * @author alexhuleatt
  */
 public class Test {
-    
+
     public static void main(String[] args) throws FileNotFoundException {
 //        Logger stdoutLogger = new Logger() {
 //            @Override
@@ -33,10 +33,19 @@ public class Test {
 //        
 //        a.pathfind(new Point(0,0), new Point(75,75));
         int sz = 1000;
-        WTFGrid msg = new WTFGrid(0,sz,0,sz);
+        WTFGrid msg = new WTFGrid(0, sz, 0, sz);
         DStarLite dstrlt = new DStarLite(0, sz, 0, sz, msg.getObstacles(), null);
+//        AStar astr = new AStar(0, sz, 0, sz, msg.getObstacles(), new Logger() {
+//
+//            @Override
+//            public void report(String st, int... args) {
+//            }
+//        });
+        //System.out.println(msg.visualize());
+        System.out.println("Made map.");
         dstrlt.pathfind(msg.getStart(), msg.getEnd());
-        System.out.println(msg.visualize());
+        System.out.println("Found path");
+        System.exit(0);
         HashMap<Point, Integer> g = dstrlt.cost;
         String[][] arrrrrrrr = new String[sz][sz];
         for (Point p : g.keySet()) {
@@ -44,20 +53,18 @@ public class Test {
                 int val = g.get(p);
                 if (p.equals(msg.getStart())) {
                     arrrrrrrr[p.x][p.y] = "S";
-                }
-                else if (p.equals(msg.getEnd())) {
+                } else if (p.equals(msg.getEnd())) {
                     arrrrrrrr[p.x][p.y] = "E";
                 } else if (val == DStarLite.myMAX) {
-                    arrrrrrrr[p.x][p.y] = "X";
+                    arrrrrrrr[p.x][p.y] = "X"; //lol
                 } else {
-                    arrrrrrrr[p.x][p.y] = ""+val;
+                    arrrrrrrr[p.x][p.y] = "" + val;
                 }
             }
         }
-        
-        PrettyPrinter pp = new PrettyPrinter(new PrintStream(new File("Out.txt")));
+
+        PrettyPrinter pp = new PrettyPrinter(System.out);
         pp.print(arrrrrrrr);
-        
     }
-    
+
 }

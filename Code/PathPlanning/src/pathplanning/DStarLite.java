@@ -15,25 +15,19 @@ import pathplanning.util.Pair;
  *
  * @author Alex
  */
-public class DStarLite implements Pather {
+public class DStarLite {
 
     //Using hashes instad of arrays for overall memory savings on sparse grids.
     //Minor memory losses on dense grids. <25%.
     //Java hashmap loadfactor to resize = ~.75
-    private final HashSet<Point> obs;
-    public HashMap<Point, Integer> cost;
-    private HashMap<Point, Integer> RHS;
-    private HashSet<Point> closed_set;
+    public final HashMap<Point, Integer> cost;
+    private final HashMap<Point, Integer> rhs;
 
-    private final Heap<Point> q = new Heap(80000); //Allocate early.
-    private int index;
+    private final Heap<Point> q = new Heap(800000); //Allocate early.
     private Point last_point;
     private Point first_point;
-    public static final int MAX_PATH_LENGTH = 400;
-    private final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
     public int minX, minY, maxX, maxY;
     public static int myMAX = 1000000;
-    
 
     private final Logger callback;
 
@@ -42,10 +36,13 @@ public class DStarLite implements Pather {
         this.minY = minY;
         this.maxX = maxX;
         this.maxY = maxY;
-        this.obs = obs;
         this.callback = callback;
-        RHS = new HashMap<>();
-        closed_set = new HashSet<>();
+        rhs = new HashMap<>();
+        cost = new HashMap<>();
+        for (Point o : obs) {
+            cost.put(o, -1);
+            rhs.put(o, -1);
+        }
     }
 
     /**
@@ -56,73 +53,52 @@ public class DStarLite implements Pather {
      * @return An array of Points representing a path that does not intersect
      * any obstacles.
      */
-    @Override
     public Point[] pathfind(Point start, Point finish) {
-        cost = new HashMap<>();
-        
-        cost.put(finish, myMAX);
-        RHS.put(finish, 0);
-        cost.put(start, myMAX);
-        RHS.put(start, myMAX);
-        q.insert(finish);
+
         Point current;
         last_point = start;
         first_point = finish;
-        first_point.pairCost=getKey(first_point);
-        first_point.usePair=true;
-        
-        last_point.pairCost=getKey(last_point);
+        setCost(first_point, myMAX);
+        rhs.put(first_point, 0);
+        setCost(last_point, myMAX);
+        rhs.put(last_point, myMAX);
+        q.insert(first_point);
+        first_point.pairCost = getKey(first_point,myMAX,0);
+        first_point.usePair = true;
+
+        last_point.pairCost = getKey(last_point,myMAX,myMAX);
         last_point.usePair = true;
-        
-        
-        while (q.len() > 0 && (q.peek().compareTo(last_point) < 0 || 
-                getRHS(last_point) != cost.get(last_point))) { //change while case
-            do {
-                current = q.pop();
-            } while (closed_set.contains(current));
-            
-            if (current == null) break;
-            int rhs = getRHS(current);
-            if (cost.get(current) > rhs) {
-                cost.put(current,rhs);
+
+        while (q.len() > 0 && (q.peek().compareTo(last_point) < 0
+                || ((int)rhs.get(last_point)) != cost.get(last_point))) {
+
+            current = q.pop();
+
+            int temp_rhs = getRHS(current);
+            if (temp_rhs == -1 || !(current.x >= minX && current.y >= minY
+                    && current.x < maxX && current.y < maxY)) {
+                continue;
+            }
+            int temp_cost = cost.get(current);
+            if (temp_cost > temp_rhs) {
+                setCost(current, temp_rhs);
             } else {
-                cost.put(current, myMAX);
-                
-                updateState(current);
+                setCost(current, myMAX);
+                updateState(current, temp_cost, temp_rhs);
+            }
+            for (int i = 0; i < 8; ++i) {
+                updateState(moveTo(current, i));
             }
             if (callback != null) {
                 callback.report("pop", current.x, current.y);
             }
-            expand(current);
         }
         return null;
     }
 
-    private void expand(Point p) {
-        if (callback != null) {
-            callback.report("expand", p.x, p.y);
-        }
-        if (!(p.x < maxX && p.y < maxY && p.x >= minX && p.y >= minY)) {
-            return;
-        }
-        for (int i = 0; i < 8; i++) {
-            check(p,i);
-        }
-    }
-
-    /**
-     * Uses Euclidean distance squared as heuristic, allowing us to keep
-     * everything as ints.
-     *
-     * @param parent
-     * @param dir
-     */
-    private void check(Point parent, int dir) {
-        if (callback != null) {
-            callback.report("eval", parent.x, parent.y, dir);
-        }
-        final Point n = moveTo(parent, dir);
-        updateState(n);
+    private void setCost(Point p, int n) {
+        cost.put(p, n);
+        updateNeighborRHS(p, n);
     }
 
     /**
@@ -153,67 +129,48 @@ public class DStarLite implements Pather {
         }
     }
 
-    /**
-     * New obstacle will be considered on next run.
-     *
-     * @param p
-     */
-    public void addObs(Point p) {
-        obs.add(p);
-    }
-
     public int getRHS(Point p) {
-        if (obs.contains(p)) return myMAX;
         if (p.equals(first_point)) {
             return 0;
         }
-        int min = myMAX;
-        int calc;
-        for (int i = 0; i < 8; i++) {
-            Point cur = moveTo(p, i);
-            if (!cost.containsKey(cur)) {
-                calc = myMAX;
-            } else {
-                int t_cost = cost.get(cur);
-                if (t_cost >= myMAX) {
-                    calc = t_cost;
-                }
-                else {
-                    calc = cost.get(cur) + p.dist(cur);
-                }
-            }
-            if (calc < min) {
-                min = calc;
-            }
-        }
-        return min;
+        return rhs.get(p);
+
     }
 
-    public Pair<Integer, Integer> getKey(Point p) {
-        if (obs.contains(p)) {
-            return new Pair<>(myMAX,myMAX);
-        }
-        return new Pair<>(
-                Math.min(cost.get(p), getRHS(p)) + last_point.dist(p),
-                Math.min(cost.get(p), getRHS(p)));
+    public Pair<Integer, Integer> getKey(Point p, int temp_cost, int temp_rhs) {
+        int ncost = Math.min(temp_cost, temp_rhs);
+        return new Pair<>(ncost + last_point.dist(p), ncost);
     }
-    
+
+    private void updateNeighborRHS(Point p, int ncost) {
+        for (int i = 0; i < 8; ++i) {
+            Point n = moveTo(p, i);
+            int dis = p.dist(n);
+            Integer cos = cost.get(n);
+            if (cos == null) {
+                rhs.put(n, ncost + dis);
+                cost.put(n, myMAX);
+            } else if (cos > ncost + dis) {
+                rhs.put(n, ncost + dis);
+            }
+        }
+    }
+
     public void updateState(Point p) {
-        if (!cost.containsKey(p)) {
-            cost.put(p,myMAX);
-        }
+        updateState(p, cost.get(p), getRHS(p));
+    }
+
+    public void updateState(Point p, int temp_cost, int temp_rhs) {
         if (!p.equals(last_point)) {
-            RHS.put(p,getRHS(p));
+            rhs.put(p, temp_rhs);
         }
-        if (!closed_set.contains(p)) {
-            closed_set.add(p);
-        } 
-        
-        if (cost.get(p) != getRHS(p)) {
-            p.pairCost = getKey(p);
+        if (q.contains(p)) {
+            q.remove(p);
+        }
+        if (temp_cost != temp_rhs) {
+            p.pairCost = getKey(p, temp_cost, temp_rhs);
             p.usePair = true;
             q.insert(p);
-            closed_set.remove(p);
         }
     }
 

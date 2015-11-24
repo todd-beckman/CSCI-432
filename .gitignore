@@ -3,3 +3,4 @@ auxfiles/
 *.bat
 /Code/PathPlanning/build/
 logs.txt
+/Code/PathPlanning/dist/
