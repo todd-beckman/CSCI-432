@@ -24,10 +24,10 @@ public class LogManager implements Logger {
 
         //  Settings
         int minX = 0;
-        int maxX = 10;
+        int maxX = 100;
         int minY = 0;
 
-        int maxY = 10;
+        int maxY = 100;
 
         Grid g = new WTFGrid(minX, maxX, minY, maxY);
 
@@ -50,6 +50,8 @@ public class LogManager implements Logger {
         System.out.println("D*Lite: " + Arrays.toString(dStarLite.pathfind(g.getStart(), g.getEnd())));
 
         aStarLogger.writeToFile("astar.csv");
+        
+        aStarLogger.writeSizesToFile("astarsizes.csv");
 
         //  D* Lite Pathfind
 //        dStarLite.pathfind(g.getStart(), g.getEnd());
@@ -57,6 +59,14 @@ public class LogManager implements Logger {
     }
 
     private final ArrayList<Log> logs = new ArrayList<Log>();
+    private int stackSize = 0, logSize = 0;
+    private ArrayList<Integer> stackSizes = new ArrayList<Integer>();
+    private ArrayList<Integer> logSizes = new ArrayList<Integer>();
+    
+    {   //  shoutout to Jacob
+        stackSizes.add(0);
+        logSizes.add(0);
+    }
 
     /**
      * Saves a log entry
@@ -64,6 +74,35 @@ public class LogManager implements Logger {
     @Override
     public void report(String st, int... args) {
         logs.add(new Log(st, args));
+        logSizes.add(++logSize);
+        switch (st) {
+        case "push":
+            stackSizes.add(++stackSize);
+            break;
+        case "pop":
+            stackSizes.add(--stackSize);
+            break;
+        default:
+            stackSizes.add(stackSize);
+            break;
+        }
+    }
+    
+    public void writeSizesToFile(String filename) {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+            bw.write("dependent,independent\n");
+            for (int i = 0; i < stackSizes.size(); i++) {
+                bw.write(stackSizes.get(i) + "," + logSizes.get(i) + "\n");
+            }
+            bw.close();
+        }
+        catch (IOException e) {
+            System.out.println("Could not write to " + filename + ". Printing to console instead.");
+            System.out.println(stackSizes.toString());
+            System.out.println("\n");
+            System.out.println(logSizes.toString());
+        }
     }
 
     /**
