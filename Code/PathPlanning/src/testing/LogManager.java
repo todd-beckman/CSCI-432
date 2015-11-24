@@ -52,7 +52,8 @@ public class LogManager implements Logger {
         
         //  Uncomment the report method below
         //  because this adds to the runtime
-        //aStarLogger.writeSizesToFile("astarsizes.csv");
+        aStarLogger.writeSizesToFile("astarsizes.csv");
+        aStarLogger.writeStatsToFile("astarstats.csv");
 
         //  D* Lite Pathfind
 //        dStarLite.pathfind(g.getStart(), g.getEnd());
@@ -63,6 +64,11 @@ public class LogManager implements Logger {
     private int stackSize = 0, logSize = 0;
     private ArrayList<Integer> stackSizes = new ArrayList<Integer>();
     private ArrayList<Integer> logSizes = new ArrayList<Integer>();
+    
+
+    private int numberOfPushes = 0;
+    private int numberOfPops = 0;
+    private int numberOfRemoves = 0;
     
     {   //  shoutout to Jacob
         stackSizes.add(0);
@@ -76,18 +82,38 @@ public class LogManager implements Logger {
     public void report(String st, int... args) {
         logs.add(new Log(st, args));
         //  adds to runtime; uncomment to use
-//        logSizes.add(++logSize);
-//        switch (st) {
-//        case "push":
-//            stackSizes.add(++stackSize);
-//            break;
-//        case "pop":
-//            stackSizes.add(--stackSize);
-//            break;
-//        default:
-//            stackSizes.add(stackSize);
-//            break;
-//        }
+        logSizes.add(++logSize);
+        switch (st) {
+        case "push":
+            stackSizes.add(++stackSize);
+            numberOfPushes++;
+            break;
+        case "pop":
+            stackSizes.add(--stackSize);
+            numberOfPops++;
+            break;
+        case "remove":
+            numberOfRemoves++;
+        default:
+            stackSizes.add(stackSize);
+            break;
+        }
+    }
+    
+    public void writeStatsToFile(String filename) {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+            bw.write("pushes," + numberOfPushes + "\n");
+            bw.write("pops," + numberOfPops + "\n");
+            bw.write("removes," + numberOfRemoves);
+            bw.close();
+        }
+        catch (IOException e) {
+            System.out.println("Could not write to " + filename + ". Printing to console instead.");
+            System.out.println("pushes," + numberOfPushes + "\n");
+            System.out.println("pops," + numberOfPops + "\n");
+            System.out.println("removes," + numberOfRemoves);
+        }
     }
     
     public void writeSizesToFile(String filename) {
