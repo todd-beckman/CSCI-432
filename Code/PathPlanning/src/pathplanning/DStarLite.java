@@ -54,7 +54,6 @@ public class DStarLite {
      * any obstacles.
      */
     public void init_pathfind(Point start, Point finish) {
-
         last_point = start;
         first_point = finish;
         setCost(first_point, myMAX);
@@ -97,6 +96,10 @@ public class DStarLite {
                 callback.report("pop", current.x, current.y);
             }
         }
+    }
+    
+    public Point[] getPath(Point from) {
+        return null;
     }
 
     public void addObs(Point p) {
