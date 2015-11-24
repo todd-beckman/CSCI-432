@@ -51,7 +51,9 @@ public class LogManager implements Logger {
 
         aStarLogger.writeToFile("astar.csv");
         
-        aStarLogger.writeSizesToFile("astarsizes.csv");
+        //  Uncomment the report method below
+        //  because this adds to the runtime
+        //aStarLogger.writeSizesToFile("astarsizes.csv");
 
         //  D* Lite Pathfind
 //        dStarLite.pathfind(g.getStart(), g.getEnd());
@@ -74,18 +76,19 @@ public class LogManager implements Logger {
     @Override
     public void report(String st, int... args) {
         logs.add(new Log(st, args));
-        logSizes.add(++logSize);
-        switch (st) {
-        case "push":
-            stackSizes.add(++stackSize);
-            break;
-        case "pop":
-            stackSizes.add(--stackSize);
-            break;
-        default:
-            stackSizes.add(stackSize);
-            break;
-        }
+        //  adds to runtime; uncomment to use
+//        logSizes.add(++logSize);
+//        switch (st) {
+//        case "push":
+//            stackSizes.add(++stackSize);
+//            break;
+//        case "pop":
+//            stackSizes.add(--stackSize);
+//            break;
+//        default:
+//            stackSizes.add(stackSize);
+//            break;
+//        }
     }
     
     public void writeSizesToFile(String filename) {
