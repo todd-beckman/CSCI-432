@@ -42,7 +42,7 @@ public class Heap<E extends Comparable> {
      * @throws IndexOutOfBoundsException
      * @throws IllegalArgumentException
      */
-    public void insert(E toAdd) throws IndexOutOfBoundsException, IllegalArgumentException {
+    public void push(E toAdd) throws IndexOutOfBoundsException, IllegalArgumentException {
         
         if (contains(toAdd)) { //if it contains this point, remove it.
             remove(toAdd);         

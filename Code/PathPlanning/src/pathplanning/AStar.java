@@ -239,7 +239,7 @@ public class AStar {
                 callback.report("push", n.x, n.y);
             }
             n.cost = dis + potentialCost;
-            q.insert(n);
+            q.push(n);
             prev.put(n, dir);
             cost.put(n, potentialCost);
         }

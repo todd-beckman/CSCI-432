@@ -58,9 +58,9 @@ More specifically, it is defined by Wikipedia as "...the problem of finding a pa
 Nowadays, this problem and its applications are ubiquitous. From Roombas to Google Maps, there is great interest in finding efficient routes.
 
 In 1956, up in the Netherlands, a man named Dijkstra conceived of an algorithm for finding these paths rather quickly. 
+It more or less works by always looking at the point nearest to the start, so when you get to the goal, you know that whatever path you took to get there was the shortest.
 
-EXPLANATION HERE
-
+DRAW THREE DUDES WITH NAMES
 About 30 years later, 3 neat guys at the Stanford Research Institute conceived of a modified algorithm called A-Star.
 This algorithm was very similar to Dijkstra's except that it incorporated a guesstimate of how close a given location is to the goal.
 The intuition is that we can avoid looking at certain places if we have some information about our world.
@@ -83,21 +83,21 @@ FUN DOODLE OF D* LITE, GO BACK TO GOOGLE MAPS, CRASHED CAR UPDATES GOOGLE MAPS' 
 
 Generally, one of the bottlenecks of A* and D* Lite (besides the number of vertices and edges) is finding the cheapest vertex that we want to explore. One popular option is a binary heap, with nice, friendly, speedy, insertion and remove-min. 
 
-The current lower bound for running time utilizes a *fibonacci-heap*, with REALLY FAST insertion, and the same remove-min. We didn't implement this because 
+DRAW LITTLE BINARY TREE, MAYBE WRITE OUT HEAP PROPERTY
 
-DRAW RUNNING TIMES. POTENTIALL JIMMY JOHNS JOKE.
+The current lower bound for running time utilizes a *fibonacci-heap*, with REALLY FAST insertion, and the same remove-min. We didn't implement this because:
 
  "They are complicated when it comes to coding them."
   "...they are not as efficient in practice when compared with the theoretically less efficient forms of heaps..."
  ("The Pairing Heap: A new form of Self Adjusting Heap")
 
-QUICK DOODLE OF F-HEAP. NO EXPLANATION. SCRIBBLE OVER.
+QUICK DOODLE OF F-HEAP. NO EXPLANATION. SCRIBBLE OVER TO SIGNIFY UNIMPORTANCE.
 
 Due to the issues with priority queues, one of our major metrics for performance was the number of pushes and pops from the heap, which represent visiting vertices in the graph, as well as the size of the heap over time. 
 
 The former should relate directly to the actual running time, whereas the latter will provide a more *precise* understanding of the running time. **size matters**. 10,000 pushes followed by 10,000 pops is far worse than 20,000 alternating pushes and pops, because of how large the heap gets in the first case.
 
-If D* Lite works as intended, when a new obstacle is encountered, not only should we perform far fewer pushes and pops, our heap should be much smaller than A*'s
+If D* Lite works as intended, when a new obstacle is seen, not only should we perform far fewer pushes and pops, our heap should be much smaller than A*'s, in addition to not visiting as many vertices.
 
 
 

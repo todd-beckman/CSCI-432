@@ -60,7 +60,7 @@ public class DStarLite {
         rhs.put(first_point, 0);
         setCost(last_point, myMAX);
         rhs.put(last_point, myMAX);
-        q.insert(first_point);
+        q.push(first_point);
         first_point.pairCost = getKey(first_point, myMAX, 0);
         first_point.usePair = true;
 
@@ -105,7 +105,7 @@ public class DStarLite {
     public void addObs(Point p) {
         cost.put(p, -1);
         rhs.put(p, -1);
-        q.insert(p);
+        q.push(p);
         updateNeighborRHS(p, myMAX);
         for (int i = 0; i < 8; i++) {
             updateState(moveTo(p,i));
@@ -187,7 +187,7 @@ public class DStarLite {
         if (temp_cost != temp_rhs) {
             p.pairCost = getKey(p, temp_cost, temp_rhs);
             p.usePair = true;
-            q.insert(p);
+            q.push(p);
         }
     }
 

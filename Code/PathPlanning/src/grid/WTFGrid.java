@@ -65,13 +65,25 @@ public class WTFGrid extends Grid {
         
         start = randomLocation();
         HashSet<Point> obs = getObstacles();
-        while (obs.contains(start)) {
+        while (obs.contains(start) ) {
             start = randomLocation();
         }
-        end = randomLocation();
-        while (obs.contains(end)) {
-            end = randomLocation();
+        Point maxEnd = randomLocation();
+        int count = 0;
+        Point temp;
+        while (count < 30) {
+            temp = randomLocation();
+            if (obs.contains(temp)) {
+                continue;
+            }
+            if (temp.dist(start) > maxEnd.dist(start)) {
+                maxEnd = temp;
+                count = 0;
+            } else {
+                count++;
+            }
         }
+        end = maxEnd;
         
 
     }

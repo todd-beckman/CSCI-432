@@ -25,7 +25,6 @@ public class LogManager implements Logger {
         int minX = 0;
         int maxX = 100;
         int minY = 0;
-
         int maxY = 100;
 
         Grid g = new WTFGrid(minX, maxX, minY, maxY);
