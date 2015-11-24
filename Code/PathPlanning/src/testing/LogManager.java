@@ -43,7 +43,7 @@ public class LogManager implements Logger {
         //LogManager dStarLogger = new LogManager();
 
         //  Construct the paths and their loggers
-        Pather aStar = new AStar(minX, maxX, minY, maxY, g.getObstacles(), aStarLogger);
+        AStar aStar = new AStar(minX, maxX, minY, maxY, g.getObstacles(), aStarLogger);
         //Pather dStarLite = new DStarLite(minX, maxX, minY, maxY, g.getObstacles(), dStarLogger);
         long t = System.currentTimeMillis();
         //  A* Pathfind

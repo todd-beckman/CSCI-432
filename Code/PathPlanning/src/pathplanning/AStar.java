@@ -15,7 +15,7 @@ import pathplanning.util.Heap;
  *
  * @author Alex
  */
-public class AStar implements Pather {
+public class AStar {
 
     //Using hashes instad of arrays for overall memory savings on sparse grids.
     //Minor memory losses on dense grids. <25%.
@@ -24,7 +24,7 @@ public class AStar implements Pather {
     private final HashMap<Point, Integer> prev; //Map for pointing to parent
     private final HashMap<Point, Integer> cost; //Map holding cost of point
 
-    private final Heap<Point> q = new Heap<>(16000); //Allocate early.
+    private final Heap<Point> q = new Heap<>(80000); //Allocate early.
     private Point dest;
     public static final int MAX_PATH_LENGTH = 10000;
     private final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.
@@ -82,7 +82,7 @@ public class AStar implements Pather {
      * @param minY
      * @param maxY
      * @param obs HashSet of obstacles
-     * @param path_buffer Array to hold path after reconstruction.
+     * @param path_buffer Array to hold path after reconstruction. 
      */
     public AStar(int minX, int maxX, int minY, int maxY, HashSet<Point> obs, Point[] path_buffer) {
         this.minX = minX;
@@ -128,7 +128,6 @@ public class AStar implements Pather {
      * @return An array of Points representing a path that does not intersect
      * any obstacles.
      */
-    @Override
     public Point[] pathfind(Point start, Point finish) {
         prev.clear();
         cost.clear();
