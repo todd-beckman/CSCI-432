@@ -141,7 +141,6 @@ public class DStarLite {
         int ncost = Math.min(temp_cost, temp_rhs);
         return new Pair<>(ncost + last_point.dist(p), ncost);
     }
-
     private void updateNeighborRHS(Point p, int ncost) {
         for (int i = 0; i < 8; ++i) {
             Point n = moveTo(p, i);

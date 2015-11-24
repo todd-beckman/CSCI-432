@@ -4,14 +4,16 @@ import java.io.PrintStream;
 
 import static java.lang.String.format;
 import static java.lang.System.out;
-
+/**
+ * STOLEN FROM STACKOVERFLOW
+ */
 public final class PrettyPrinter {
 
     private static final char BORDER_KNOT = '+';
     private static final char HORIZONTAL_BORDER = '-';
     private static final char VERTICAL_BORDER = '|';
 
-    private static final String DEFAULT_AS_NULL = "(NULL)";
+    private static final String DEFAULT_AS_NULL = "X";
 
     private final PrintStream out;
     private final String asNull;

@@ -41,7 +41,7 @@ public class Test {
 //            public void report(String st, int... args) {
 //            }
 //        });
-        //System.out.println(msg.visualize());
+//        System.out.println(msg.visualize());
         System.out.println("Made map.");
         dstrlt.pathfind(msg.getStart(), msg.getEnd());
         System.out.println("Found path");
@@ -55,7 +55,7 @@ public class Test {
                     arrrrrrrr[p.x][p.y] = "S";
                 } else if (p.equals(msg.getEnd())) {
                     arrrrrrrr[p.x][p.y] = "E";
-                } else if (val == DStarLite.myMAX) {
+                } else if (val == -1) {
                     arrrrrrrr[p.x][p.y] = "X"; //lol
                 } else {
                     arrrrrrrr[p.x][p.y] = "" + val;

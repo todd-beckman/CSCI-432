@@ -16,7 +16,6 @@ public class Point implements Comparable {
     public int cost;
     public Pair<Integer, Integer> pairCost;
     public boolean usePair = false;
-    private static final double sqrt2 = 1.41421356237;
 
     public Point(int x, int y) {
         this.x = x;
@@ -36,8 +35,7 @@ public class Point implements Comparable {
         int tx = Math.abs(p.x - x);
         int ty = Math.abs(p.y - y);
         int tp = Math.min(tx, ty); //number of diagonals
-        int tp2 = 12 * tp + 17 * (tx + ty - tp);
-        return tp2; //close enough for my needs.
+        return 12 * tp + 17 * (tx + ty - tp); //close enough for my needs.
 
     }
 
