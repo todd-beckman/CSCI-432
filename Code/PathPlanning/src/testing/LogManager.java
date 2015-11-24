@@ -47,7 +47,7 @@ public class LogManager implements Logger {
         DStarLite dStarLite = new DStarLite(minX, maxX, minY, maxY, g.getObstacles(), dStarLogger);
         
         System.out.println("A*: " + Arrays.toString(aStar.pathfind(g.getStart(), g.getEnd())));
-        System.out.println("D*Lite: " + Arrays.toString(dStarLite.pathfind(g.getStart(), g.getEnd())));
+        dStarLite.init_pathfind(g.getStart(), g.getEnd());
 
         aStarLogger.writeToFile("astar.csv");
         

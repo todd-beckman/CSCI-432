@@ -53,9 +53,8 @@ public class DStarLite {
      * @return An array of Points representing a path that does not intersect
      * any obstacles.
      */
-    public Point[] pathfind(Point start, Point finish) {
+    public void init_pathfind(Point start, Point finish) {
 
-        Point current;
         last_point = start;
         first_point = finish;
         setCost(first_point, myMAX);
@@ -63,14 +62,19 @@ public class DStarLite {
         setCost(last_point, myMAX);
         rhs.put(last_point, myMAX);
         q.insert(first_point);
-        first_point.pairCost = getKey(first_point,myMAX,0);
+        first_point.pairCost = getKey(first_point, myMAX, 0);
         first_point.usePair = true;
 
-        last_point.pairCost = getKey(last_point,myMAX,myMAX);
+        last_point.pairCost = getKey(last_point, myMAX, myMAX);
         last_point.usePair = true;
 
+        resolve();
+    }
+
+    public void resolve() {
+        Point current;
         while (q.len() > 0 && (q.peek().compareTo(last_point) < 0
-                || ((int)rhs.get(last_point)) != cost.get(last_point))) {
+                || (rhs.get(last_point)).equals(cost.get(last_point)))) {
 
             current = q.pop();
 
@@ -93,7 +97,16 @@ public class DStarLite {
                 callback.report("pop", current.x, current.y);
             }
         }
-        return null;
+    }
+
+    public void addObs(Point p) {
+        cost.put(p, -1);
+        rhs.put(p, -1);
+        q.insert(p);
+        updateNeighborRHS(p, myMAX);
+        for (int i = 0; i < 8; i++) {
+            updateState(moveTo(p,i));
+        }
     }
 
     private void setCost(Point p, int n) {
@@ -141,6 +154,7 @@ public class DStarLite {
         int ncost = Math.min(temp_cost, temp_rhs);
         return new Pair<>(ncost + last_point.dist(p), ncost);
     }
+
     private void updateNeighborRHS(Point p, int ncost) {
         for (int i = 0; i < 8; ++i) {
             Point n = moveTo(p, i);
@@ -154,6 +168,7 @@ public class DStarLite {
             }
         }
     }
+    
 
     public void updateState(Point p) {
         updateState(p, cost.get(p), getRHS(p));

@@ -180,4 +180,7 @@ public class Heap<E extends Comparable> {
         return indices.containsKey(e);
     }
 
+    public void empty() {
+        len=0;
+    }
 }

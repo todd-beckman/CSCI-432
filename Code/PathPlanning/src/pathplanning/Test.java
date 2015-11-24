@@ -32,7 +32,7 @@ public class Test {
 //        AStar a = new AStar(0, 100, 0, 100, new HashSet<Point>(), stdoutLogger);
 //        
 //        a.pathfind(new Point(0,0), new Point(75,75));
-        int sz = 1000;
+        int sz = 30;
         WTFGrid msg = new WTFGrid(0, sz, 0, sz);
         DStarLite dstrlt = new DStarLite(0, sz, 0, sz, msg.getObstacles(), null);
 //        AStar astr = new AStar(0, sz, 0, sz, msg.getObstacles(), new Logger() {
@@ -43,9 +43,21 @@ public class Test {
 //        });
 //        System.out.println(msg.visualize());
         System.out.println("Made map.");
-        dstrlt.pathfind(msg.getStart(), msg.getEnd());
+        dstrlt.init_pathfind(msg.getStart(), msg.getEnd());
         System.out.println("Found path");
-        System.exit(0);
+        HashSet<Point> obs = msg.getObstacles();
+        for (int i = 0; i < 10; i++) {
+            int randX = (int)(sz*Math.random());
+            int randY = (int)(sz*Math.random());
+            Point p = new Point(randX,randY);
+            if (!obs.contains(p)) {
+                msg.addObstacle(p);
+            } else {
+                i--;
+            }
+        }
+        
+        //System.exit(0);
         HashMap<Point, Integer> g = dstrlt.cost;
         String[][] arrrrrrrr = new String[sz][sz];
         for (Point p : g.keySet()) {
