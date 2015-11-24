@@ -24,7 +24,7 @@ public class AStar {
     private final HashMap<Point, Integer> prev; //Map for pointing to parent
     private final HashMap<Point, Integer> cost; //Map holding cost of point
 
-    private final Heap<Point> q = new Heap<>(80000); //Allocate early.
+    private final Heap<Point> q = new Heap<Point>(80000); //Allocate early.
     private Point dest;
     public static final int MAX_PATH_LENGTH = 10000;
     private final Point[] temp = new Point[MAX_PATH_LENGTH]; //Allocate this one time.

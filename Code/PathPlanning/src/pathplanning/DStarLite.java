@@ -23,7 +23,7 @@ public class DStarLite {
     public final HashMap<Point, Integer> cost;
     private final HashMap<Point, Integer> rhs;
 
-    private final Heap<Point> q = new Heap(800000); //Allocate early.
+    private final Heap<Point> q = new Heap<Point>(800000); //Allocate early.
     private Point last_point;
     private Point first_point;
     public int minX, minY, maxX, maxY;
