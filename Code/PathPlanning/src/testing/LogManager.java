@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import grid.Grid;
-import grid.RandomGrid;
 import grid.WTFGrid;
 import java.io.BufferedWriter;
 import java.util.Arrays;
