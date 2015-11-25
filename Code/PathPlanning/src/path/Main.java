@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package path2;
+package path;
 
-import path2.structs.Graph;
-import path2.structs.Point;
-import path2.algs.AStar;
+import path.structs.Graph;
+import path.structs.Point;
+import path.algs.AStar;
 
 import grid.WTFGrid;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import path2.algs.DSLite;
+import path.algs.DSLite;
 
 /**
  *

@@ -1,6 +1,6 @@
 package grid;
 
-import path2.structs.Point;
+import path.structs.Point;
 
 
 /**

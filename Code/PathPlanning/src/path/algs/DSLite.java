@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package path2.algs;
+package path.algs;
 
-import path2.Logger;
-import path2.structs.Pair;
-import path2.structs.Point;
+import path.Logger;
+import path.structs.Pair;
+import path.structs.Point;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
-import path2.structs.Graph;
+import path.structs.Graph;
 
 /**
  *

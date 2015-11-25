@@ -1,4 +1,4 @@
-package path2;
+package path;
 
 import java.io.FileWriter;
 import java.io.IOException;
