@@ -1,6 +1,7 @@
 package grid;
 
-import pathplanning.util.Point;
+import path2.structs.Point;
+
 
 /**
  * A grid initialized with a certain number of random obstacles

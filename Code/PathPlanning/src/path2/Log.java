@@ -1,5 +1,7 @@
-package testing;
+package path2;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -46,6 +48,9 @@ public class Log {
         return sb.toString();
     }
 
+    public static void bulkWrite(ArrayList<Log> logs, BufferedWriter bw) throws IOException {
+        for (Log l : logs) bw.write(l+"\n");
+    }
     /**
      * Converts a log into the format: name,arg0,arg1,etc
      */

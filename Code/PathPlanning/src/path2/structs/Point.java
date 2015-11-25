@@ -3,19 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pathplanning.util;
+package path2.structs;
 
 /**
  *
  * @author alexhuleatt
+ * @param <E>
  */
-public class Point implements Comparable {
+public class Point<E extends Comparable> implements Comparable {
 
     public final int x;
     public final int y;
-    public int cost;
-    public Pair<Integer, Integer> pairCost;
-    public boolean usePair = false;
+    public E cost;
 
     public Point(int x, int y) {
         this.x = x;
@@ -31,12 +30,10 @@ public class Point implements Comparable {
      * @param p
      * @return
      */
-    public int dist(Point p) {
-        int tx = Math.abs(p.x - x);
-        int ty = Math.abs(p.y - y);
-        int tp = Math.min(tx, ty); //number of diagonals
-        return 12 * tp + 17 * (tx + ty - tp); //close enough for my needs.
-
+    public double dist(Point p) {
+        int dx = p.x - x;
+        int dy = p.y - y;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     @Override
@@ -63,31 +60,14 @@ public class Point implements Comparable {
 
     @Override
     public String toString() {
-        return "(" + x + "," + y + "):" + ((usePair) ? pairCost : cost);
+        return "(" + x + "," + y + "):" + cost;
     }
 
     @Override
     public int compareTo(Object o) {
-        if (!(o instanceof Point)) {
-            System.out.println("wat");
+        if (!(o instanceof Point<?>)) {
             return 0;
         }
-        if (!usePair) {
-            return cost - ((Point) o).cost;
-        } else {
-            Point p = (Point) o;
-            int k1 = pairCost.a;
-            int k2 = pairCost.b;
-            int pk1 = p.pairCost.a;
-            int pk2 = p.pairCost.b;
-
-            if (k1 < pk1) {
-                return -1;
-            } else if (k1 > pk1) {
-                return 1;
-            } else {
-                return k2 - pk2;
-            }
-        }
+        return cost.compareTo( ((Point<E>) o).cost );
     }
 }

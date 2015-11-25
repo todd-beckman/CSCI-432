@@ -1,7 +1,7 @@
 package grid;
 
 import java.util.HashSet;
-import pathplanning.util.Point;
+import path2.structs.Point;
 
 /**
  * A grid containing a start, end, and list of obstacles.

@@ -4,3 +4,5 @@ auxfiles/
 /Code/PathPlanning/build/
 logs.txt
 /Code/PathPlanning/dist/
+/Code/PathPlanning/nbproject
+.DS_STORE
