@@ -6,3 +6,5 @@ logs.txt
 /Code/PathPlanning/dist/
 /Code/PathPlanning/nbproject
 .DS_STORE
+/Code/PathPlanning/build.xml
+/Code/PathPlanning/manifest.mf
