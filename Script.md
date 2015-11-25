@@ -60,7 +60,7 @@ Nowadays, this problem and its applications are ubiquitous. From Roombas to Goog
 In 1956, up in the Netherlands, a man named Dijkstra conceived of an algorithm for finding these paths rather quickly. 
 It more or less works by always looking at the point nearest to the start, so when you get to the goal, you know that whatever path you took to get there was the shortest.
 
-DRAW THREE DUDES WITH NAMES
+DRAW THREE DUDES WITH NAMES Peter Hart, Nils Nilsson and Bertram Raphael 
 About 30 years later, 3 neat guys at the Stanford Research Institute conceived of a modified algorithm called A-Star.
 This algorithm was very similar to Dijkstra's except that it incorporated a guesstimate of how close a given location is to the goal.
 The intuition is that we can avoid looking at certain places if we have some information about our world.
@@ -93,11 +93,26 @@ The current lower bound for running time utilizes a *fibonacci-heap*, with REALL
 
 QUICK DOODLE OF F-HEAP. NO EXPLANATION. SCRIBBLE OVER TO SIGNIFY UNIMPORTANCE.
 
-Due to the issues with priority queues, one of our major metrics for performance was the number of pushes and pops from the heap, which represent visiting vertices in the graph, as well as the size of the heap over time. 
+NOW FOR SOMETHING COMPLETELY DIFFERENT
+WARNING: TECHNICAL JARGON AHEAD
 
-The former should relate directly to the actual running time, whereas the latter will provide a more *precise* understanding of the running time. **size matters**. 10,000 pushes followed by 10,000 pops is far worse than 20,000 alternating pushes and pops, because of how large the heap gets in the first case.
+Due to the issues with priority queues, Our major metric for performance was the number of pushes, remove-min's, and removals from the heap. 
+Each of these operations require O(log(n)) calculations, and provide a fair comparison between A* and D* Lite. 
 
-If D* Lite works as intended, when a new obstacle is seen, not only should we perform far fewer pushes and pops, our heap should be much smaller than A*'s, in addition to not visiting as many vertices.
+Removing the minimum from the heap represents visiting a vertex in our graph. So counting the total number of remove-min's is equivalent to the total number of vertices we visit. 
+
+A note on real-world running time: because actual running time is implementation based, it isn't a terribly valuable metric. In our implementation, for example, after profiling D* Lite, and found that adding and removing from HashMaps was more than 50% of our running time! This was our implementation decision, and potentially there are much better options, meaning it wouldn't provide any important information to compare real-world time.
+
+
+
+##Data
+
+* Number of log(n) operations
+** Push, pop, remove
+
+Pops represent vertices expanded.
+For each pop, we potentially push 8 neighbors.
+
 
 
 
