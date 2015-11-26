@@ -1,4 +1,4 @@
-#To not sound like a retard
+#To not sound stupid
 
 ##Basics
 * These algorithms find the least cost path through a graph between two points.
