@@ -1,17 +1,17 @@
+#Person 0
+##Intro intro
 
-
-**Person 0**
-#Intro intro
-
-~~~Drawing graph or grid while explanation is happening, not at all complicated, don't detract from lecture.
-~~~Draw path planning while.
+~~~DOODLE OUT "Path Planning"
 
 The shortest path problem is a quintessential problem in Computer Science. Simply stated, it means finding the shortest, or least cost, path between two points.
 
+~~~DRAW GRAPH RIGHT HERE AND DRAW SHORTEST PATH IN LIKE RED OR SOME SHIT
 More specifically, it is defined by Wikipedia as "...the problem of finding a path between two vertices in a graph such that the sum of the weights of its constituent edges is minimized." (Wikipedia)
 
+~~~DRAW CUTE ROOMBA, GOOGLE MAPS
 Nowadays, this problem and its applications are ubiquitous. From Roombas to Google Maps, there is great interest in finding efficient routes.
 
+~~~DRAW DIJKSTRA, SOME NETHERLANDS JOKE
 In 1956, up in the Netherlands, a man named Dijkstra conceived of an algorithm for finding these paths rather quickly. 
 It more or less works by always looking at the point nearest to the start, so when you get to the goal, you know that whatever path you took to get there was the shortest.
 
@@ -57,6 +57,7 @@ Generally, one of the bottlenecks of A* and D* Lite (besides the number of verti
 
 The current lower bound for running time utilizes a *fibonacci-heap*, with REALLY FAST insertion, and the same remove-min. We didn't implement this because:
 
+~~~WRITE THESE OUT
  "They are complicated when it comes to coding them."
   "...they are not as efficient in practice when compared with the theoretically less efficient forms of heaps..."
  ("The Pairing Heap: A new form of Self Adjusting Heap")
