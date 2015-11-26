@@ -69,9 +69,7 @@ The current lower bound for running time utilizes a *fibonacci-heap*, with REALL
 #Person 5
 #Show heap, draw arrows to and from heap representing insertion, pop, remove
 ~~~NEW PAGE
-Due to the issues with priority queues, Our major metric for performance was the number of pushes, remove-min's, and removals from the heap. 
-Each of these operations require O(log(n)) calculations, and provide a fair comparison between A* and D* Lite. 
-
+In both D* Lite and A*, the most expensive operations by far are those involving the priority queue, all of which were O(log(n)). For all intents and purposes, all our other operations were constant time. Therefore, the important metric for us was the total number of these operations.
 
 Removing the minimum from the heap represents visiting a vertex in our graph. So counting the total number of remove-min's is equivalent to the total number of vertices we visit. 
 
