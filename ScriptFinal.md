@@ -79,9 +79,15 @@ The current lower bound for running time utilizes a *fibonacci-heap*, with REALL
 #Show heap, draw arrows to and from heap representing insertion, pop, remove
 ~~~NEW PAGE
 
-In both D* Lite and A*, the most expensive operations by far are those involving the priority queue, all of which were O(log(n)). For all intents and purposes, all our other operations were constant time. Therefore, the important metric for us was the total number of these operations.
+~~~GO BACK TO HEAP DRAWING, SHOW ARROWS TO AND FROM HEAP, REPRESENTING OPERATIONS
+
+In both D* Lite and A*, the most expensive operations by far are those involving the priority queue, all of which were O(log(n)). For all intents and purposes, all our other operations were constant time, and entirely negligible. Therefore, the only important metric for us was the total number of these heap operations.
+
+~~~SHOW GRAPH, VISIT VERTEX
 
 Removing the minimum from the heap represents visiting a vertex in our graph. So counting the total number of remove-min's is equivalent to the total number of vertices we visit. 
+
+~~~DRAW CLOCK
 
 A note on real-world running time: because actual running time is implementation based, it isn't a terribly valuable metric. In our implementation, for example, after profiling D* Lite, and found that adding and removing from HashMaps was more than 50% of our running time! This was our implementation decision, and potentially there are much better options, meaning it wouldn't provide any important information to compare real-world time.
 
