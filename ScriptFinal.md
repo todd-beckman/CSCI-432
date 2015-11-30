@@ -26,14 +26,14 @@ It more or less works by always looking at the point nearest to the start, so wh
 ~~~DRAW THREE DUDES WITH NAMES Peter Hart, Nils Nilsson and Bertram Raphael 
 
 About 30 years later, 3 neat guys at the Stanford Research Institute conceived of a modified algorithm called A-Star.
-This algorithm was very similar to Dijkstra's except that it incorporated a guesstimate of how close a given location is to the goal.
+This algorithm was very similar to Dijkstra's except that it incorporated a heuristic, or guesstimate, of how close a given location is to the goal.
 The intuition is that we can avoid looking at certain places if we have some information about our world.
 
-~~~COMPARISON TO GOOGLE MAPS, HAVE CUT OUT CARS WITH PEOPLES' HANDS MOVING THEM. HAVE ONE GET INTO CRASH.
+~~~COMPARISON TO GOOGLE MAPS, HAVE HOTWHEELS WITH PEOPLES' HANDS MOVING THEM. HAVE ONE GET INTO CRASH.
 
 Sadly, however, it is often the case that we do not have perfect information, or that our world is different since we last looked.
 This poses a problem for the aforementioned algorithms, as each time we see something new, our paths are no longer valid, and must be recalculated.
-What we want, is an algorithm that can plan paths in real-time.
+What we want, is an algorithm that can plan, and replan, paths in real-time.
 
 
 #Person 3

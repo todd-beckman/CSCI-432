@@ -12,13 +12,13 @@ import java.util.Objects;
 /**
  *
  * @author alexhuleatt
+ * @param <E>
  */
 public class Graph<E> {
 
     private final HashMap<E, Vertex> map;
 
     private class Vertex {
-
         public final HashMap<Vertex, Edge> succ;
         public final HashMap<Vertex, Edge> pred;
 
@@ -48,7 +48,6 @@ public class Graph<E> {
     }
 
     private class Edge {
-
         public final Vertex from;
         public final Vertex to;
         public double cost;
@@ -58,6 +57,7 @@ public class Graph<E> {
             this.to = to;
             this.cost = cost;
         }
+
     }
 
     public Graph() {
@@ -124,6 +124,11 @@ public class Graph<E> {
         }
     }
 
+    /**
+     * 
+     * @param grid
+     * @return 
+     */
     public static Graph<Point> gridToGraph(boolean[][] grid) {
         Graph<Point> g = new Graph<>();
 
@@ -156,5 +161,10 @@ public class Graph<E> {
             }
         }
         return g;
+    }
+    
+    public double[][] toMatrix() {
+        HashMap<Vertex,Integer> indices = new HashMap<>();
+        return null;
     }
 }

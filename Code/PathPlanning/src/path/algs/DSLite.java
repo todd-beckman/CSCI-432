@@ -28,7 +28,7 @@ public class DSLite {
     public final PriorityQueue<Point> q;
     private Point sgoal;
     private Point sstart;
-    private Logger callback;
+    private final Logger callback;
 
     public DSLite(Graph<Point> g, Logger callback) {
         this.g = g;

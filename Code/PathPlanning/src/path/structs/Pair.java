@@ -8,6 +8,8 @@ package path.structs;
 /**
  *
  * @author alexhuleatt
+ * @param <A>
+ * @param <B>
  */
 public class Pair<A extends Comparable,B extends Comparable> implements Comparable {
     public A a;

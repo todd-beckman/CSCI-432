@@ -17,11 +17,9 @@ import java.util.logging.Level;
  * @author alexhuleatt
  */
 public class StreamLogger implements Logger {
-    private final String fname;
-    
-    private BufferedWriter bw;
+
+    private final BufferedWriter bw;
     public StreamLogger(String fname) throws FileNotFoundException {
-        this.fname=fname;
         bw = new BufferedWriter(new PrintWriter(fname));
     }
 

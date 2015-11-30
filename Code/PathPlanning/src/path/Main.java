@@ -23,10 +23,13 @@ import path.algs.DSLite;
 public class Main {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        int sz = 700;
+        int sz = 2000;
         Graph<Point> g = Graph.gridToGraph(new boolean[sz][sz]);
+        System.out.println("Graph constructed.");
         WTFGrid wtf = new WTFGrid(0, sz, 0, sz);
+        System.out.println("Grid constructed");
         runAStar(g, wtf);
+        System.out.println("A* completed");
         runDSLite(g, wtf);
     }
 
@@ -46,8 +49,10 @@ public class Main {
             if (path_index >= cur_path.size()) {
                 break;
             }
+            
             d.addObstacle(cur_path.get(path_index));
             cur_path = d.pathfind(cur_path.get(path_index - 1));
+            strm.report("new path");
             path_index = 0;
         }
 
@@ -65,14 +70,12 @@ public class Main {
                     && !unknown.contains(cur_path.get(path_index))) {
                 path_index++;
             }
-
             if (path_index >= cur_path.size()) {
                 break;
             }
             a.addObstacle(cur_path.get(path_index));
             cur_path = a.pathfind(cur_path.get(path_index - 1), wtf.getEnd());
             path_index = 0;
-
         }
 
         strm.close();

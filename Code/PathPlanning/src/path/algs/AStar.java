@@ -17,7 +17,7 @@ import java.util.PriorityQueue;
  * @author alexhuleatt
  */
 public class AStar {
-    private Graph<Point> g;
+    private final Graph<Point> g;
     private final Logger callback;
     public AStar(Graph<Point> g, Logger callback) {
         this.g=g;
